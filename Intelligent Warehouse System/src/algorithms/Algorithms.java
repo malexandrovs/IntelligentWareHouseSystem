@@ -7,44 +7,49 @@ public abstract class Algorithms{
    *
    */
 
+   State finalState;
+
   public State hillClimbing(State initState){
 
-
-     int samePSU = 0;
-
      ArrayList int[] neighbours = state.createNeighbours(initState);
+     //ceate neighbours of initial State
 
      int stateValue = state.evaluate(initState);
+     //evaluate inital State
 
-
+     if(stateValue == optimum()){
+       finalState = initState;
+       return finalState;
+     }
+     //check wether current value is already the optimal value
 
     do{
-
-       if(stateValue == optimum()){
-         finalState = initState;
-         break;
-       }
 
        State newState = neighbours.getHead();
 
        if(newState == null){
          finalState = initState;
-         break;
+         return finalState;
        }
+       //checking if the neighbour list is empty
 
        int newValue = state.evaluate(newState);
+       //evaluate next neighbour
 
        if(newValue == optimum()){
          finalState = newState;
-         break;
+         return finalState;
        }
+       //check neighbour for optimality
 
        if(newValue >= stateValue){
          stateValue = newValue;
          initState = newState;
        }
+       //replace the initial state with the neigbour, if the evaluation value is better
 
        neighbours.removehead();
+       //delete head of the neighbour list to get next neighbour
 
 
      } while(newState != null);
@@ -76,10 +81,46 @@ public abstract class Algorithms{
 
 
   public State firstChioceHillClimbing(State initState){
-        ....
 
-        return finalState
-  }
+    ArrayList int[] neighbours = state.createNeighbours(initState);
+    //ceate neighbours of initial State
+
+    int stateValue = state.evaluate(initState);
+    //evaluate inital State
+
+    if(stateValue == optimum()){
+      finalState = initState;
+      return finalState;
+    }
+    //check wether current value is already the optimal value
+
+   do{
+
+      State newState = neighbours.getHead();
+
+      if(newState == null){
+        finalState = initState;
+        return finalState;
+      }
+      //checking if the neighbour list is empty, if yes, the current inital state is returned as best state
+
+      int newValue = state.evaluate(newState);
+      //evaluate next neighbour
+
+      if(newValue >= stateValue){
+        finalState = newState;
+        return finalState;
+      }
+      //return the neighbour as the best state, if it is better than the current state
+
+      neighbours.removehead();
+      //delete head of the neighbour list to get next neighbour
+
+
+    } while(newState != null);
+
+    return finalState;
+ }
 
 
 
