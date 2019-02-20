@@ -6,6 +6,17 @@ public abstract class Algorithms{
    *@return State, which describes the local optimal result
    *
    */
+  
+  /**@comment Julia Kaltenborn:
+    * Attention! State is NOT the state like you use it!
+    * a state is always an int[]!
+    * my suggestion:
+    *
+    * State stateMethods = State.getInstance();
+    * public int[] hillClimbing(int[] initState){
+    *   ArrayList<int[]> neighbours = stateMethods.createNeighbours(initState);
+    *   etc.
+    */
 
    State finalState;
 
