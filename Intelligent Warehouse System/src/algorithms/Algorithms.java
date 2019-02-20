@@ -6,37 +6,28 @@ public abstract class Algorithms{
    *@return State, which describes the local optimal result
    *
    */
-  
-  /**@comment Julia Kaltenborn:
-    * Attention! State is NOT the state like you use it!
-    * a state is always an int[]!
-    * my suggestion:
-    *
-    * State stateMethods = State.getInstance();
-    * public int[] hillClimbing(int[] initState){
-    *   ArrayList<int[]> neighbours = stateMethods.createNeighbours(initState);
-    *   etc.
-    */
 
-   State finalState;
+   int[] finalState;
+    State stateMethods = State.getInstance();
 
-  public State hillClimbing(State initState){
+  public int[] hillClimbing(int[] initState){
 
-     ArrayList int[] neighbours = state.createNeighbours(initState);
+    finalState = initState;
+
+     ArrayList int[] neighbours = stateMethods.createNeighbours(initState);
      //ceate neighbours of initial State
 
-     int stateValue = state.evaluate(initState);
+     int stateValue = stateMethods.evaluate(initState);
      //evaluate inital State
 
-     if(stateValue == state.optimum()){
-       finalState = initState;
+     if(stateValue == stateMethods.optimum()){
        return finalState;
      }
      //check wether current value is already the optimal value
 
     do{
 
-       State newState = neighbours.getHead();
+       int[] newState = neighbours.getHead();
 
        if(newState == null){
          finalState = initState;
@@ -44,10 +35,10 @@ public abstract class Algorithms{
        }
        //checking if the neighbour list is empty
 
-       int newValue = state.evaluate(newState);
+       int newValue = stateMethods.evaluate(newState);
        //evaluate next neighbour
 
-       if(newValue == state.optimum()){
+       if(newValue == stateMethods.optimum()){
          finalState = newState;
          return finalState;
        }
@@ -72,42 +63,105 @@ public abstract class Algorithms{
 
 
 
-  public State simulatedAnnealing(State initState, double initTemp){
+  public int[] simulatedAnnealing(int[] initState, double initTemp){
      ....
 
      return finalState
   }
 
-  public State localBeam(State initState, int numOfPos){
+  public int[] localBeam(int[] initState, int numOfPos){
      ....
 
      return finalState
   }
 
-  public State randomRestartHillClimbing(State initState){
-        ....
+  public int[] randomRestartHillClimbing(int[] initState, int iterations){
 
-        return finalState
-  }
+    finalState = initState;
+
+    int[] firstfinalState = finalState;
+
+    boolean firstRun = true;
+
+    for(int run = 1; run < iterations; run++){
+
+      if(firstRun != true){
+        //createNewInitial state;
+        initState = //new initState ;
+      }
+      //in every new hill climb we need a new initial State
+
+      ArrayList int[] neighbours = stateMethods.createNeighbours(initState);
+      //ceate neighbours of initial State
+
+      int stateValue = stateMethods.evaluate(initState);
+      //evaluate inital State
+
+      if(stateValue == stateMethods.optimum()){
+        finalState = initState;
+        return finalState;
+      }
+      //check wether current value is already the optimal value
+
+     do{
+        int[] newState = neighbours.getHead();
+
+        if(newState == null){
+          firstfinalState = initState;
+        }
+        //checking if the neighbour list is empty
+
+        else{
+          int newValue = stateMethods.evaluate(newState);
+          //evaluate next neighbour
+
+          if(newValue == stateMethods.optimum()){
+            finalState = newState;
+            return finalState;
+          }
+          //check neighbour for optimality
+
+          if(newValue >= stateValue){
+            stateValue = newValue;
+            initState = newState;
+          }
+          //replace the initial state with the neigbour, if the evaluation value is better
+
+          neighbours.removehead();
+          //delete head of the neighbour list to get next neighbour
+        }
+
+        if(stateMethods.evaluate(firstfinalState) >= stateMethods.evaluate(finalState)){
+          finalState = firstfinalState;
+        }
+        //evaluate the final state of every hill climb and use the best one as the final state
+
+      } while(newState != null);
+      firstRun = false;
+    }
+
+    return finalState;
+ }
 
 
-  public State firstChioceHillClimbing(State initState){
+  public int[] firstChioceHillClimbing(int[] initState){
 
-    ArrayList int[] neighbours = state.createNeighbours(initState);
+    finalState = initState;
+
+    ArrayList int[] neighbours = stateMethods.createNeighbours(initState);
     //ceate neighbours of initial State
 
-    int stateValue = state.evaluate(initState);
+    int stateValue = stateMethods.evaluate(initState);
     //evaluate inital State
 
-    if(stateValue == state.optimum()){
-      finalState = initState;
+    if(stateValue == stateMethods.optimum()){
       return finalState;
     }
     //check wether current value is already the optimal value
 
    do{
 
-      State newState = neighbours.getHead();
+      int[] newState = neighbours.getHead();
 
       if(newState == null){
         finalState = initState;
@@ -115,7 +169,7 @@ public abstract class Algorithms{
       }
       //checking if the neighbour list is empty, if yes, the current inital state is returned as best state
 
-      int newValue = state.evaluate(newState);
+      int newValue = stateMethods.evaluate(newState);
       //evaluate next neighbour
 
       if(newValue >= stateValue){
