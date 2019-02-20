@@ -2,17 +2,25 @@ import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/** Class State provides methods for operatig one states.
+ * A warehouse and an order needs to be initalized for the most methods.
+ * A state can be evluated or neighbours can be created for it. Furthermore
+ * an initialState can be created when given an order.
+ *
+ * @author Julia Kaltenborn (jkaltenborn@uos.de)
+ */
 public class State {
 
   private String[] order = null;
   private HashMap<Integer, ArrayList<String>> warehouse = new HashMap<Integer, ArrayList<String>>();
   private static State stateInstance = null;
+	
   //singleton
   private State(HashMap<Integer, ArrayList<String>> warehouse){
     this.warehouse = warehouse;
   }
   //if one calls getInstance, but does not update warehouse before
-  //-> your Problem
+  //-> null Object returned
   public static State getInstance(){
     if(stateInstance == null){
       System.out.println("Null Object returned. State has not yet been initialized with Warehouse.");
