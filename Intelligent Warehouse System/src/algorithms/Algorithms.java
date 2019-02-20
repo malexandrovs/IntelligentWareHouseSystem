@@ -17,7 +17,7 @@ public abstract class Algorithms{
      int stateValue = state.evaluate(initState);
      //evaluate inital State
 
-     if(stateValue == optimum()){
+     if(stateValue == state.optimum()){
        finalState = initState;
        return finalState;
      }
@@ -36,7 +36,7 @@ public abstract class Algorithms{
        int newValue = state.evaluate(newState);
        //evaluate next neighbour
 
-       if(newValue == optimum()){
+       if(newValue == state.optimum()){
          finalState = newState;
          return finalState;
        }
@@ -88,7 +88,7 @@ public abstract class Algorithms{
     int stateValue = state.evaluate(initState);
     //evaluate inital State
 
-    if(stateValue == optimum()){
+    if(stateValue == state.optimum()){
       finalState = initState;
       return finalState;
     }
