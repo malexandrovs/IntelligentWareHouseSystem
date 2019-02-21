@@ -1,3 +1,5 @@
+import java.util.Random;
+
 public abstract class Algorithms{
 
   //TODO create subclasses which implement the algorithms
@@ -7,8 +9,9 @@ public abstract class Algorithms{
    *
    */
 
-   int[] finalState;
-    State stateMethods = State.getInstance();
+  int[] finalState;
+  State stateMethods = State.getInstance();
+
 
   public int[] hillClimbing(int[] initState){
 
@@ -63,17 +66,86 @@ public abstract class Algorithms{
 
 
 
-  public int[] simulatedAnnealing(int[] initState, double initTemp){
-     ....
+  public int[] simulatedAnnealing(int[] initState){
 
-     return finalState
+    int temperature = 100;
+    //temperature for simulated annealing
+
+
+    finalState = initState;
+
+    ArrayList int[] neighbours = stateMethods.createNeighbours(initState);
+     //ceate neighbours of initial State
+
+    int stateValue = stateMethods.evaluate(initState);
+     //evaluate inital State
+
+    if(stateValue == stateMethods.optimum()){
+       return finalState;
+    }
+     //check wether current value is already the optimal value
+
+    for(int t = 1; t < 100; t++){
+
+      temperature = temperature -5;
+
+      if(temperature == 0){
+        finalstate = initState;
+        return finalState;
+      }
+      //if temperature reaches zero before we found the optimal state, we return the current state as the best ome
+
+       int[] newState = neighbours.getHead();
+
+       if(newState == null){
+         finalState = initState;
+         return finalState;
+       }
+       //checking if the neighbour list is empty
+
+       int newValue = stateMethods.evaluate(newState);
+       //evaluate next neighbour
+
+       if(newValue == stateMethods.optimum()){
+         finalState = newState;
+         return finalState;
+       }
+       //check neighbour for optimality
+
+       int deltaValue = newValue - stateValue;
+       Random downstep = new Random();
+       double probability = donwstep.nextDouble();
+       //declare necessary variables for simulated annealing downstep
+
+
+       if(deltaValue > 0){
+         stateValue = newValue;
+         initState = newState;
+       }
+       //replace the initial state with the neigbour, if the evaluation value is better
+       else if(probability <= Math.exp(deltaValue / temperature)){
+         initState = newState;
+         stateValue = newValue;
+       }
+       //if not, do it either way with a specific probability
+
+       neighbours.removehead();
+       //delete head of the neighbour list to get next neighbour
+    }
   }
+
+
+
+
 
   public int[] localBeam(int[] initState, int numOfPos){
      ....
 
      return finalState
   }
+
+
+
 
   public int[] randomRestartHillClimbing(int[] initState, int iterations){
 
@@ -144,6 +216,9 @@ public abstract class Algorithms{
  }
 
 
+
+
+
   public int[] firstChioceHillClimbing(int[] initState){
 
     finalState = initState;
@@ -180,8 +255,6 @@ public abstract class Algorithms{
 
       neighbours.removehead();
       //delete head of the neighbour list to get next neighbour
-
-
     } while(newState != null);
 
     return finalState;
