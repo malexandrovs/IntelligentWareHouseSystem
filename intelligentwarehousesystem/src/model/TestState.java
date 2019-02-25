@@ -1,3 +1,4 @@
+package intelligentwarehousesystem.src.model;
 import java.util.*;
 
 public class TestState{

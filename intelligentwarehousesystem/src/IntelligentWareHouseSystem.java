@@ -1,3 +1,4 @@
+package intelligentwarehousesystem.src;
 import controller.WarehouseController;
 import model.WareHouseModel;
 import view.WareHouseView;

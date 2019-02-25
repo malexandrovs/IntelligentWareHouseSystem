@@ -1,4 +1,4 @@
-package model;
+package intelligentwarehousesystem.src.model;
 
 import algorithms.SearchAlgorithm;
 
@@ -6,7 +6,7 @@ public class WareHouseModel {
 
 	private String order;
 	private SearchAlgorithm alg;
-	private HashMap<int, String[]> wareHouse = new HashMap<int, String>;
+	private HashMap<Integer, String[]> wareHouse = new HashMap<Integer, String>();
 	private String result;
 
 	public WareHouseModel(){

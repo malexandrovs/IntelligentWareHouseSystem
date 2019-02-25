@@ -1,4 +1,4 @@
-package view;
+package intelligentwarehousesystem.src.view;
 
 import java.awt.event.ActionListener;
 import javax.swing.*;

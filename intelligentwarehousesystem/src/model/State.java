@@ -1,6 +1,8 @@
+package intelligentwarehousesystem.src.model;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import src.algorithms;
 
 /** Class State provides methods for operatig one states.
  * A warehouse and an order needs to be initalized for the most methods.

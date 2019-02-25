@@ -1,4 +1,4 @@
-package controller;
+package intelligentwarehousesystem.src.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
