@@ -145,14 +145,14 @@ public class Algorithms{
 
 
 
-  public ArrayList<int[]> localBeam(int[] initState, int numOfBeams){
+  public List<int[]> localBeam(int[] initState, int numOfBeams){
     List<int[]> current = new ArrayList<>();
   	current.add(initState);
 
   	for(int randomState = 1; randomState < numOfBeams; randomState ++){
 
   		//create new random state;
-  		current.add(random State);
+  		//current.add(random State);
   	}
     //create List of current random states
 
@@ -186,7 +186,7 @@ public class Algorithms{
 
 
   			for(int pos = 0; pos < neighbours.size(); pos ++){
-  				nextElement = neighbours(pos);
+  				nextElement = neighbours.get(pos);
           nextValue = stateMethods.evaluate(nextElement);
 
           if(nextValue > bestValue){
