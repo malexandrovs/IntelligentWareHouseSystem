@@ -125,7 +125,7 @@ public class Algorithms{
 
   	for(int randomState = 1; randomState < numOfBeams; randomState ++){
 
-  		int[] newRandomState = stateMethods.generateRandom();
+  		int[] newRandomState = stateMethods.generateRandomState();
 
   		current.add(newRandomState);
   	}
@@ -227,7 +227,7 @@ public class Algorithms{
     for(int run = 1; run < iterations; run++){
 
       if(firstRun != true){
-        initState = stateMethods.generateRandom();
+        initState = stateMethods.generateRandomState();
 
       }
 
