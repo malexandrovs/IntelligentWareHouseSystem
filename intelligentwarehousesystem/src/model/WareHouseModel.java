@@ -92,7 +92,7 @@ public class WareHouseModel {
 	//get PSU number
 	//returns String with elements
 
-	public String getResult() {
+	public int[] getResult() {
 		//anzahl der PSUs used
 		//all used Psus identifiers
 		//

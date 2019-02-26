@@ -1,4 +1,4 @@
-//package intelligentwarehousesystem.src.model;
+package model;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -245,7 +245,7 @@ public class StateHandler {
     result = stateAsSet.size();
     if(stateAsSet.contains(Integer.valueOf(-1))){
       result = result -1;
-      System.out.println("@StateHandler: Attention, State for which number of used PSUs was asked is not valid.")
+      System.out.println("@StateHandler: Attention, State for which number of used PSUs was asked is not valid.");
     }
     return result;
   }
