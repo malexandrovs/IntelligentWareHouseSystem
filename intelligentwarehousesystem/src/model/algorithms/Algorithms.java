@@ -1,74 +1,124 @@
 package model.algorithms;
 import java.util.*;
-import model.*;
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Arrays;
-
+import intelligentwarehousesystem.*;
+//j: was macht die Klasse?
+/**
+ *hier reinschreiben
+ */
 public class Algorithms{
-
+  //j: die nachfolgenden comments rausschmeissen
   //TODO create subclasses which implement the algorithms
 
   /**@author Danny
    *@return State, which describes the local optimal result
    *
    */
-
   int[] finalState;
-  State stateMethods = State.getInstance(new HashMap<Integer, ArrayList<String>>());
+  //j: ich korrigiere schonmal wegen meinem neuen Klassennamen State <- StateHandler
+  StateHandler stateMethods = StateHandler.getInstance();
+  //j: SPAETER sollten wir uns ueberlegen ob wir hieraus ein singelton machen,
+  //das klaeren wir aber als gruppe ab
+   
+  //j: WICHTIG; vermeide inline comments, kommentiere stattdessen die gesamte Methode
+  //mit doc Strings, die ich bereits vorbereitet habe
+  //ausserdem dachte ich, dass comments ueber und nicht unter die betreffenden abschnitt kommen,
+  //aber vllt gilt das noch als kuenstlerische freiheit XD
+  
+  //j: WICHTIG Ich bin der Meinung du solltest den
+  //initial State selber produzieren, da das eigentlich
+  //dein Verantwortungsbereich ist!
+  //int[] initState = stateMethods.generateInitialState();
+  //verwende generateRandomState() wenn es zufaellige States sein sollen
 
-
-
+  /**
+   *was macht die Methode?
+   *@param initState; was ist dieser Parameter 
+   *@return was gibst du zurueck
+   */
   public int[] hillClimbing(int[] initState){
-
+    //j: besser: this.finalState = initState;
+    //dadurch weiß der Leser, dass es sich um die Klassenvariable handelt
     finalState = initState;
+     //WICHTG lasse dir iterationSteps vom Nutzer als Parameter übergeben!
+     //setze diesen statt der 100 ein!
+    for(int iterations = 0; iterations < 100; iterations ++){
+      //j: zeile 46 un 47 zusammenfassen und du musst nicht casten!
+      
+      //ArrayList<int[]> neighbours = stateMethods.createNeighbours(initState)
+       List<int[]> neighbours = new ArrayList<int[]>();
+      //j: ersetze initState mit finalState
+       neighbours = (ArrayList<int[]>) stateMethods.createNeighbours(initState);
+      //ceate neighbours of initial State //j: comment kann weg, wie alle anderen inline comments hier
+      //j:ersetze initState mit finalState
+       int stateValue = stateMethods.evaluate(initState);
+       //evaluate inital State
 
-     List<int[]> neighbours = new ArrayList<int[]>();
-     neighbours = (ArrayList<int[]>) stateMethods.createNeighbours(initState);
-     //ceate neighbours of initial State
-
-     int stateValue = stateMethods.evaluate(initState);
-     //evaluate inital State
-
-     if(stateValue == stateMethods.optimum()){
-       return finalState;
-     }
-     //check wether current value is already the optimal value
-
-     int[] newState = neighbours.remove(0);
-
-    do{
-
-       if(newState == null){
-         finalState = initState;
+       if(stateValue == stateMethods.optimum()){
+         //j: return this.finalState;
          return finalState;
        }
-       //checking if the neighbour list is empty
+       //check wether current value is already the optimal value
 
-       int newValue = stateMethods.evaluate(newState);
-       //evaluate next neighbour
+       int[] bestNeighbour = theBestNeighbour(neighbours);
+       int newValue = stateMethods.evaluate(bestNeighbour);
+       //evaluate best neighbour
 
        if(newValue == stateMethods.optimum()){
-         finalState = newState;
+         //j: return bestNeighbour; //wir brechen eh aus der Loop raus, weitere zuweisungen brauchen nur zeit und platz
+         finalState = bestNeighbour;
          return finalState;
        }
        //check neighbour for optimality
 
-       if(newValue >= stateValue){
-         stateValue = newValue;
-         initState = newState;
+       if(newValue <= stateValue){
+         //j: return initState;
+         finalState = initState;
+         return finalState;
        }
        //replace the initial state with the neigbour, if the evaluation value is better
+        
+      //j: die beiden folgenden Zeilen sind voellig unnoetig 
+      //(da wir oben eh gleich finalState statt initState verwenden koennen und stateValue bei jedem Loop Durchlauf eh neu bestimmt wird)
+      //schreib stattdessen hier sofort:
+      //this.finalState = bestNeighbour;
+       initState = bestNeighbour;
+       stateValue = newValue;
+       finalState = initState;
+    }
 
-       //neighbours.removeHead();
-       //delete head of the neighbour list to get next neighbour
-
-       newState = neighbours.remove(0);
-
-
-     } while(newState != null);
 
      return finalState;
+  }
+  
+  //WICHTIG: dein Code ist perfekt und vollkommen richtig!!!
+  //ich mache nur schoenheitskorrekturen und kuerze ihn XD
+  /**
+   *was macht die Methode?
+   *@param iterationLimit; was ist dieser Parameter 
+   *@return was gibst du zurueck
+   */
+  public int[] hillClimbingJuliaCut(int iterationLimit){
+    this.finalState = stateMethods.generateInitialState();
+    //damit nicht in jedem loop durchgang zweimal evaluate gemacht werden muss,
+    //habe ich das hierhoch gezogen
+    int finalStateValue = stateMethods.evaluate(this.finalState);
+
+    for(int iterations = 0; iterations < iterationLimit; iterations ++){
+       ArrayList<int[]> neighbours = stateMethods.createNeighbours(this.finalState);
+       if(finalStateValue == stateMethods.optimum()){
+         return this.finalState;
+       }
+       int[] bestNeighbour = theBestNeighbour(neighbours);
+       int newValue = stateMethods.evaluate(bestNeighbour);
+       if(newValue == stateMethods.optimum()){
+         return bestNeighbour;
+       }
+       if(newValue <= stateValue){
+         return initState;
+       }
+       this.finalState = initState;
+    }
+     return this.finalState;
   }
 
 
@@ -359,6 +409,24 @@ public class Algorithms{
 
     return finalState;
  }
+
+
+ public int[] theBestNeighbour(List<int[]> neighbours){
+   int[] currentBest = neighbours.get(0);
+   int currentBestValue = stateMethods.evaluate(currentBest);
+   int newValue = 0;
+   int[] newState;
+
+   for(int position = 1; position < neighbours.size(); position ++){
+     newState = neighbours.get(position);
+     if(currentBestValue < stateMethods.evaluate(newState)){
+       currentBest = newState;
+       currentBestValue = newValue;
+     }
+   }
+   return currentBest;
+ }
+ //we use this to compute the best neighbour for Hill Climbing
 
 
 
