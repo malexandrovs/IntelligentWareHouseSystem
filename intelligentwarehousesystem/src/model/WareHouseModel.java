@@ -1,11 +1,11 @@
-package intelligentwarehousesystem.src.model;
+package model;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import algorithms.SearchAlgorithm;
+import algorithms.Algorithms;
 
 public class WareHouseModel {
 

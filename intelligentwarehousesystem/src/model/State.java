@@ -1,8 +1,8 @@
-package intelligentwarehousesystem.src.model;
+package model;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import src.algorithms;
+// import intelligentwarehousesystem.src.algorithms.*;
 
 /** Class State provides methods for operatig one states.
  * A warehouse and an order needs to be initalized for the most methods.
@@ -75,7 +75,7 @@ public class State {
       //duplicates are not allowed in sets!
       //consequently there will be only the
       //PSUs we need without any duplicates
-      evalArray.add(new Integer(state[i]));
+      evalArray.add(Integer.valueOf(state[i]));
     }
     //result is number of elements minus number of used sets
     result = state.length - evalArray.size();

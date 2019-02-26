@@ -1,6 +1,6 @@
-package intelligentwarehousesystem.src.algorithms;
+package model.algorithms;
 import java.util.*;
-import intelligentwarehousesystem.src.model.*;
+import model.*;
 //import java.util.ArrayList;
 //import java.util.List;
 //import java.util.Arrays;
@@ -15,7 +15,7 @@ public class Algorithms{
    */
 
   int[] finalState;
-  State stateMethods = State.getInstance();
+  State stateMethods = State.getInstance(new HashMap<Integer, ArrayList<String>>());
 
 
 
