@@ -429,4 +429,5 @@ public class Algorithms{
      }
    }
    return currentBest;
+  }
 }
