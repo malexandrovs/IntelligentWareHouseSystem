@@ -1,4 +1,4 @@
-package model.algorithms;
+package intelligentwarehousesystem.src.algorithms;
 import java.util.*;
 //j: was macht die Klasse?
 /**
@@ -103,7 +103,8 @@ public class Algorithms{
     int finalStateValue = stateMethods.evaluate(this.finalState);
 
     for(int iterations = 0; iterations < iterationLimit; iterations ++){
-       ArrayList<int[]> neighbours = stateMethods.createNeighbours(this.finalState);
+      //true wenn generateInitialState, false wenn generateRandomState
+       ArrayList<int[]> neighbours = stateMethods.createNeighbours(this.finalState, true);
        if(finalStateValue == stateMethods.optimum()){
          return this.finalState;
        }
@@ -122,15 +123,21 @@ public class Algorithms{
 
 
 
-
-
+ /** ausfuellen
+  *@param
+  *@return
+  */
   public int[] simulatedAnnealing(int[] initState){
-
+    //j: kein initState, stattdessen wieder hier:
+    //this.finalState = stateMethods.generateInitialState();
+    //j: temperature als parameter uerbegeben lassen
+    //j: temperatureStep als parameter uebergeben lasse (und statt 5 verwenden)
     int temperature = 100;
     //temperature for simulated annealing
 
     finalState = initState;
-
+  
+    //j: wieder zusammenfassen
     List<int[]> neighbours = new ArrayList<>();
     neighbours= stateMethods.createNeighbours(initState);
      //ceate neighbours of initial State
@@ -142,7 +149,11 @@ public class Algorithms{
        return finalState;
     }
      //check wether current value is already the optimal value
-
+    
+    //j: mache das lesbarer fuer den Nutzer
+    //for(int i = temperature; i > 0; i = temperature - temperatureStep){...}
+    //return this.finalState;
+    //damit machst du auch dir selber das Leben deutlich leichter
     for(int t = 1; t < 100; t++){
 
       temperature = temperature -5;
@@ -152,7 +163,10 @@ public class Algorithms{
         return finalState;
       }
       //if temperature reaches zero before we found the optimal state, we return the current state as the best ome
-
+        
+      //mach doch einfach eine zweite for schleife! das ist einfacher!
+      //remove ist viel zeitintensiver als get!
+      //for(int j = 0; j < neighbours.length; j++){...}
        int[] newState = neighbours.remove(0);
 
        if(newState == null){
@@ -192,7 +206,41 @@ public class Algorithms{
     }
   }
 
-
+ /** zusammenfassend, once again, du hast alles vollkommen richtig und wirklich gut gemacht,
+  * und folgender Code ist genau deiner, nur zusammengekuerzt. Sprich, ich habe keine Ahnung wie simulatedAnnealing funktioniert
+  * da bist du der Experte, ich kuerze nur, was du geschrieben hast
+  *@param
+  *@param
+  *@return
+  */
+  public int[] simulatedAnnealingJuliaCut(int temperature, int temperatureStep){
+    this.finalState = stateMethods.generateInitialState();
+    int finalStateValue = stateMethods.evaluate(this.finalState);
+    ArrayList<int[]> neighbours = stateMethods.createNeighbours(this.finalState);
+    if(stateValue == stateMethods.optimum()){
+       return this.finalState;
+    }
+    
+    //wenn die temperature schon null ist, dann gehen wir gleich zu return this.finalState
+    for(int i = temperature; i > 0; i = temperature - temperatureStep){
+      for(int j = 0; j < neighbours.size(); j++){
+          int[] newState = neighbours.get(j);
+          int newValue = stateMethods.evaluate(newState);
+          if(newValue == stateMethods.optimum()){
+           return newState;
+          }
+          Random downstep = new Random();
+          double probability = downstep.nextDouble();
+          if(newValue - finalStateValue > 0){
+            this.finalState = newState;
+            finalStateValue = newValue;
+          } else if(probability <= Math.exp(deltaValue / temperature)){
+            this.finalState = newState;
+            finalStateValue = newValue;
+          } 
+     }
+    return this.finalState;
+  }
 
 
 
