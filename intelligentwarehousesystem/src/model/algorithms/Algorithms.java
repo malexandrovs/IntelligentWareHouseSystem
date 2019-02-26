@@ -1,9 +1,12 @@
 package intelligentwarehousesystem.src.algorithms;
 import java.util.*;
 import intelligentwarehousesystem.*;
-
+//j: was macht die Klasse?
+/**
+ *hier reinschreiben
+ */
 public class Algorithms{
-
+  //j: die nachfolgenden comments rausschmeissen
   //TODO create subclasses which implement the algorithms
 
   /**@author Danny
@@ -11,23 +14,47 @@ public class Algorithms{
    *
    */
   int[] finalState;
-  State stateMethods = State.getInstance();
+  //j: ich korrigiere schonmal wegen meinem neuen Klassennamen State <- StateHandler
+  StateHandler stateMethods = StateHandler.getInstance();
+  //j: SPAETER sollten wir uns ueberlegen ob wir hieraus ein singelton machen,
+  //das klaeren wir aber als gruppe ab
+   
+  //j: WICHTIG; vermeide inline comments, kommentiere stattdessen die gesamte Methode
+  //mit doc Strings, die ich bereits vorbereitet habe
+  //ausserdem dachte ich, dass comments ueber und nicht unter die betreffenden abschnitt kommen,
+  //aber vllt gilt das noch als kuenstlerische freiheit XD
+  
+  //j: WICHTIG Ich bin der Meinung du solltest den
+  //initial State selber produzieren, da das eigentlich
+  //dein Verantwortungsbereich ist!
+  //int[] initState = stateMethods.generateInitialState();
+  //verwende generateRandomState() wenn es zufaellige States sein sollen
 
-
-
+  /**
+   *was macht die Methode?
+   *@param initState; was ist dieser Parameter 
+   *@return was gibst du zurueck
+   */
   public int[] hillClimbing(int[] initState){
-
+    //j: besser: this.finalState = initState;
+    //dadurch weiß der Leser, dass es sich um die Klassenvariable handelt
     finalState = initState;
-
+     //WICHTG lasse dir iterationSteps vom Nutzer als Parameter übergeben!
+     //setze diesen statt der 100 ein!
     for(int iterations = 0; iterations < 100; iterations ++){
+      //j: zeile 46 un 47 zusammenfassen und du musst nicht casten!
+      
+      //ArrayList<int[]> neighbours = stateMethods.createNeighbours(initState)
        List<int[]> neighbours = new ArrayList<int[]>();
+      //j: ersetze initState mit finalState
        neighbours = (ArrayList<int[]>) stateMethods.createNeighbours(initState);
-       //ceate neighbours of initial State
-
+      //ceate neighbours of initial State //j: comment kann weg, wie alle anderen inline comments hier
+      //j:ersetze initState mit finalState
        int stateValue = stateMethods.evaluate(initState);
        //evaluate inital State
 
        if(stateValue == stateMethods.optimum()){
+         //j: return this.finalState;
          return finalState;
        }
        //check wether current value is already the optimal value
@@ -37,17 +64,23 @@ public class Algorithms{
        //evaluate best neighbour
 
        if(newValue == stateMethods.optimum()){
+         //j: this.finalState
          finalState = bestNeighbour;
          return finalState;
        }
        //check neighbour for optimality
 
        if(newValue <= stateValue){
+         //j:this.finalState
          finalState = initState;
          return finalState;
        }
        //replace the initial state with the neigbour, if the evaluation value is better
-
+        
+      //j: die beiden folgenden Zeilen sind voellig unnoetig 
+      //(da wir oben eh gleich finalState statt initState verwenden koennen und stateValue bei jedem Loop Durchlauf eh neu bestimmt wird)
+      //schreib stattdessen hier sofort:
+      //this.finalState = bestNeighbour;
        initState = bestNeighbour;
        stateValue = newValue;
        finalState = initState;
