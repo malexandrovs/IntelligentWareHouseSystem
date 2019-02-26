@@ -48,7 +48,7 @@ public class Algorithms{
          return initState;
        }
 
-       this.finalState = bestNeighbour
+       this.finalState = bestNeighbour;
     }
      return thisfinalState;
   }
