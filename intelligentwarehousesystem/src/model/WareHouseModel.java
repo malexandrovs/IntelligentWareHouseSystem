@@ -84,7 +84,7 @@ public class WareHouseModel {
 				break;
 			case 3: result = algs.randomRestartHillClimbing(param);
 				break;
-			case 4: result = algs.firstChioceHillClimbing();
+			case 4: result = algs.firstChoiceHillClimbing();
 		}
 	}
 
