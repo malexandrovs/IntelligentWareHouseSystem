@@ -285,7 +285,7 @@ public class Algorithms{
  * @return we return the state which was determined the best by the algorithm
  */
 
-  public int[] firstChioceHillClimbing(){
+  public int[] firstChoiceHillClimbing(){
     int[] initState = stateMethods.generateInitialState();
     finalState = initState;
 
