@@ -288,68 +288,66 @@ public class Algorithms{
     return theBestNeighbour(currentStates);
   }
 
-
   /**
   * This method is the implemented random restart hill climbing algorithm
   * @param iterations; this value is given by the user, it sts the number of independent hill climbing searches we use
   * @return we return the state which is determined the best by the algorithm
   */
-
+  //the user should be able to change the number of states! does iterations have
+  //anything to do with number of states??
   public int[] randomRestartHillClimbing(int iterations){
-
+    //was willst du?? einen random state oder einen initialState???
     int[] initState = stateMethods.generateInitialState();
     int[] firstfinalState = initState;
     int finalValue = 0;
     int stateValue = 0;
-
+    //this.finalState
     finalState = initState;
 
     boolean firstRun = true;
-
+    //warum faengst du bei 1 an? (am besten ist immer mit 0 anfangen)
     for(int run = 1; run < iterations; run++){
-
+      //du kommst hier niemals rein, denn firstRun bleibt immer true
+      //willst du das wirklich? -> willst du einen randomState oder einen
+      //initialState??
       if(firstRun != true){
         initState = stateMethods.generateRandomState();
-
       }
-
 
       firstfinalState = initState;
 
       for(int iteration = 0; iteration < 100; iteration ++){
          List<int[]> neighbours = new ArrayList<int[]>();
+         //no cast needed!
          neighbours = (ArrayList<int[]>) stateMethods.createNeighbours(initState);
-
+         //do immediately:
+         //List<int[]> neighbours = stateMethods.createNeighbours(initState);
 
          stateValue = stateMethods.evaluate(initState);
-
-
          if(stateValue == stateMethods.optimum()){
            return firstfinalState;
          }
 
-
          int[] bestNeighbour = theBestNeighbour(neighbours);
          int newValue = stateMethods.evaluate(bestNeighbour);
-
 
          if(newValue == stateMethods.optimum()){
            firstfinalState = bestNeighbour;
            return finalState;
          }
-
-
+         //wenn der neue Wert schlechter oder genauso gut ist wie der alte
+         //return final state
          if(newValue <= stateValue){
            firstfinalState = initState;
            return finalState;
          }
-
-
+         //ich brauche erklaerungen hier, ich verstehe nicht was du tust und warum
          initState = bestNeighbour;
          stateValue = newValue;
          firstfinalState = initState;
 
       }
+      //ich verstehe immer noch ueberhaupt nichts, mehr erklaerung noetig fuer leser
       finalValue = stateMethods.evaluate(finalState);
       if(stateValue > finalValue){
         finalState = firstfinalState;
@@ -366,57 +364,69 @@ public class Algorithms{
  * @param everyone; this method uses the standard hill climbing parameters
  * @return we return the state which was determined the best by the algorithm
  */
-
   public int[] firstChoiceHillClimbing(){
     int[] initState = stateMethods.generateInitialState();
+    //this.finalState
     finalState = initState;
 
-    for(int iteration = 0; iteration < 100; iteration ++){
+    for(int iteration = 0; iteration < 100; iteration++){
+      //specify ArrayList<int[]>();
       List<int[]> neighbours = new ArrayList<>();
       neighbours= stateMethods.createNeighbours(initState);
-
       int stateValue = stateMethods.evaluate(initState);
 
       if(stateValue == stateMethods.optimum()){
         return finalState;
       }
 
-      int[] newState = neighbours.remove(0);
+      //boolean betterNeighbourFound = false;
 
+      int[] newState = neighbours.remove(0);
+      //ACHTUNG das ist nicht das Konzept von firstChoiceHillClimbing!!!
+      //du gehst durch alle Nachbarn! du sollst aber sofort abbrechen, wenn
+      //irgendein Nachbar besser ist!
       do{
+        //huebsche idee
         if(newState == null){
+          //mach sofort
+          //return initState;
           finalState = initState;
           return finalState;
         }
-
         int newValue = stateMethods.evaluate(newState);
-
         if(newValue >= stateValue){
+          //wichtig
           initState = newState;
+          //stateValue is unwichtig, wird eh neu berechnet am anfang der
+          //for schleife
           stateValue = newValue;
+          //meinetwegen
           finalState = initState;
+          //hier musst du aus der do while schleife raus!!!
+          //betterNeighbourFound = true;
         }
         newState = neighbours.remove(0);
-      }while(newState != null);
+      }while(betterNeighbourFound || newState != null);
     }
 
     return finalState;
  }
 
-
+ //thats an arraylist my dear
  public int[] theBestNeighbour(List<int[]> neighbours){
    int[] currentBest = neighbours.get(0);
    int currentBestValue = stateMethods.evaluate(currentBest);
    int newValue = 0;
    int[] newState;
-
-   for(int position = 1; position < neighbours.size(); position ++){
+   //start with 0!!!
+   for(int position = 1; position < neighbours.size(); position++){
      newState = neighbours.get(position);
+     //you missed newValue somewhere
+     //newValue = stateMethods.evaluate(newState);
      if(currentBestValue < stateMethods.evaluate(newState)){
        currentBest = newState;
        currentBestValue = newValue;
      }
    }
    return currentBest;
- }
 }
