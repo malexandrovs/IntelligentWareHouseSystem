@@ -111,33 +111,33 @@ public class Algorithms{
   }
 
 
-  /**
+/**
   * This method is the implemented local Beam Search Algorithm
   * @param numOfBeams; this is the lenght of the list of states we want to get in the end
   * @return we return the list of states which was determined the best as a whole by the algorithm
   */
-
   public int[] localBeam(int numOfBeams){
-
+    //leave initState out, we have enough randomStates
     int[] initState = stateMethods.generateInitialState();
+    //we need ArrayList<int[]>
+    //call it currentStates
     List<int[]> current = new ArrayList<>();
   	current.add(initState);
-
+    //start with zero, if we leave first out
   	for(int randomState = 1; randomState < numOfBeams; randomState ++){
-
   		int[] newRandomState = stateMethods.generateRandomState();
-
   		current.add(newRandomState);
   	}
 
-
+    //specify arraylist
   	List<int[]> currentNeighbours = new ArrayList<>();
+    //dont add initState
+    //call that allNeighbours; makes things clearer for reader
   	List<int[]> neighbours = stateMethods.createNeighbours(initState);
 
   	int[] currentElement;
 
   	for(int iteration = 0; iteration < 100; iteration ++){
-
 
   		for(int position = 0; position < numOfBeams; position ++){
   			currentElement = current.get(position);
@@ -148,6 +148,7 @@ public class Algorithms{
 
   		int[] bestElement;
   		int bestValue;
+      //specify arraylist
   		List<int[]> bestNeighbours = new ArrayList<>();
   		int[] nextElement;
   		int nextValue;
@@ -180,14 +181,14 @@ public class Algorithms{
       int allBestNeighbourValues = 0;
       int[] element;
       int elementValue;
-
+      //mach 0 draus und lass das -1 weg
       for(int position = 1; position < current.size(); position ++){
         element = current.get(position -1);
         elementValue = stateMethods.evaluate(element);
         allCurrentValues = allCurrentValues + elementValue;
       }
 
-
+      //mach 0 draus und lass das -1 weg
       for(int position = 1; position < bestNeighbours.size(); position ++){
         element = bestNeighbours.get(position -1);
         elementValue = stateMethods.evaluate(element);
@@ -204,6 +205,87 @@ public class Algorithms{
       }
   	}
     return theBestNeighbour(current);
+  }
+
+  //diesmal habe ich nur sehr wenig ausgebessert.
+  public int[] localBeamJuliaCut(int numOfBeams){
+    List<int[]> currentStates = new ArrayList<int[]>();
+    //creating randomStates
+  	for(int randomState = 0; randomState < numOfBeams; randomState ++){
+  		int[] newRandomState = stateMethods.generateRandomState();
+  		currentStates.add(newRandomState);
+  	}
+
+  	List<int[]> currentNeighbours = new ArrayList<int[]>();
+  	int[] currentElement;
+
+    //starting the iteration
+  	for(int iteration = 0; iteration < 100; iteration++){
+      //muss hier drinne sein, damit die Liste jedes mal erneuert wird,
+      //wenn die neue Iteration beginnt
+      List<int[]> allNeighbours = new ArrayList<int[]>();
+      //create neighbours for all current States
+  		for(int position = 0; position < numOfBeams; position++){
+  			currentElement = currentStates.get(position);
+  			currentNeighbours = stateMethods.createNeighbours(currentElement);
+  			allNeighbours.addAll(currentNeighbours);
+  		}
+
+
+  		int[] bestElement;
+  		int bestValue;
+  		List<int[]> bestNeighbours = new ArrayList<int[]>();
+  		int[] nextElement;
+  		int nextValue;
+      int positionToRemove;
+      //get the best neighbours
+      //find the best, add him and remove him. restart the search
+  		for(int position = 0; position < numOfBeams; position++){
+  			bestElement = allNeighbours.get(0);
+  			bestValue = stateMethods.evaluate(bestElement);
+        positionToRemove = 0;
+        //find best neighbour
+  			for(int pos = 0; pos < allNeighbours.size(); pos++){
+  				nextElement = allNeighbours.get(pos);
+          nextValue = stateMethods.evaluate(nextElement);
+
+          if(nextValue > bestValue){
+            bestElement = nextElement;
+            bestValue = nextValue;
+            positionToRemove = pos;
+          }
+  			}
+        //add best neighbour
+        bestNeighbours.add(bestElement);
+        //remove best neighbour and restart the search
+        neighbours.remove(positionToRemove);
+  		}
+
+      //compare bestNeighbour with currentStates
+      int allCurrentValues = 0;
+      int allBestNeighbourValues = 0;
+      int[] element;
+      int elementValue;
+      //summarize currentState Values
+      for(int position = 1; position < currentStates.size(); position ++){
+        element = currentStates.get(position -1);
+        elementValue = stateMethods.evaluate(element);
+        allCurrentValues = allCurrentValues + elementValue;
+      }
+      //summarize best neighbour states values
+      for(int position = 1; position < bestNeighbours.size(); position ++){
+        element = bestNeighbours.get(position -1);
+        elementValue = stateMethods.evaluate(element);
+        allBestNeighbourValues = allBestNeighbourValues + elementValue;
+      }
+
+      if(allBestNeighbourValues > allCurrentValues){
+        currentStates = bestNeighbours;
+      } else {
+        return theBestNeighbour(currentStates);
+      }
+  	}
+    return theBestNeighbour(currentStates);
   }
 
 
