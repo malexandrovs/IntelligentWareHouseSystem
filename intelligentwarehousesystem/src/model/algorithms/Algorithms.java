@@ -64,14 +64,14 @@ public class Algorithms{
        //evaluate best neighbour
 
        if(newValue == stateMethods.optimum()){
-         //j: this.finalState
+         //j: return bestNeighbour; //wir brechen eh aus der Loop raus, weitere zuweisungen brauchen nur zeit und platz
          finalState = bestNeighbour;
          return finalState;
        }
        //check neighbour for optimality
 
        if(newValue <= stateValue){
-         //j:this.finalState
+         //j: return initState;
          finalState = initState;
          return finalState;
        }
@@ -88,6 +88,37 @@ public class Algorithms{
 
 
      return finalState;
+  }
+  
+  //WICHTIG: dein Code ist perfekt und vollkommen richtig!!!
+  //ich mache nur schoenheitskorrekturen und kuerze ihn XD
+  /**
+   *was macht die Methode?
+   *@param iterationLimit; was ist dieser Parameter 
+   *@return was gibst du zurueck
+   */
+  public int[] hillClimbingJuliaCut(int iterationLimit){
+    this.finalState = stateMethods.generateInitialState();
+    //damit nicht in jedem loop durchgang zweimal evaluate gemacht werden muss,
+    //habe ich das hierhoch gezogen
+    int finalStateValue = stateMethods.evaluate(this.finalState);
+
+    for(int iterations = 0; iterations < iterationLimit; iterations ++){
+       ArrayList<int[]> neighbours = stateMethods.createNeighbours(this.finalState);
+       if(finalStateValue == stateMethods.optimum()){
+         return this.finalState;
+       }
+       int[] bestNeighbour = theBestNeighbour(neighbours);
+       int newValue = stateMethods.evaluate(bestNeighbour);
+       if(newValue == stateMethods.optimum()){
+         return bestNeighbour;
+       }
+       if(newValue <= stateValue){
+         return initState;
+       }
+       this.finalState = initState;
+    }
+     return this.finalState;
   }
 
 
