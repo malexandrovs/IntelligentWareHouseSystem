@@ -1,9 +1,6 @@
 package intelligentwarehousesystem.src.algorithms;
 import java.util.*;
 import intelligentwarehousesystem.src.model.*;
-//import java.util.ArrayList;
-//import java.util.List;
-//import java.util.Arrays;
 
 public class Algorithms{
 
