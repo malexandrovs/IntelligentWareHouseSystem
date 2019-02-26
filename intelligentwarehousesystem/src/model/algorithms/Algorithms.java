@@ -1,6 +1,5 @@
 package model.algorithms;
 import java.util.*;
-import intelligentwarehousesystem.*;
 //j: was macht die Klasse?
 /**
  *hier reinschreiben

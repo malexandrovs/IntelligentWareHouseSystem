@@ -15,9 +15,9 @@ public class WareHouseModel {
 	private String result;
 
 	public WareHouseModel(){
-		//leerer Konstruktor, damit Algorithmen diese Klasse
-		//erstellen koennen
+
 	}
+
 	/**
 	 *@return boolean true if setWarehouse was successful
 	 * false if setWarehouse was not successful
@@ -27,6 +27,8 @@ public class WareHouseModel {
 	//HashMap wird mit zeilen als key uebersetzt und
 	//Stringarrays als value
 	//put that in a try-catch thing!
+
+	
 
 	try (
 		FileReader fr = new FileReader(warehousetxt);
