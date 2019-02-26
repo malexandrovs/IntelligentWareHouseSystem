@@ -50,7 +50,7 @@ public class Algorithms{
 
        this.finalState = bestNeighbour;
     }
-     return thisfinalState;
+     return this.finalState;
   }
 
 
