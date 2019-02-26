@@ -52,6 +52,11 @@ public class TestStateHandler{
     String[] order3 = new String[]{"bla", "0a", "blubb"};
     String[] order4 = new String[]{};
     String[] order5 = null;
+    
+    //testing numberOfUsedPSUs
+    System.out.println("Testing method numberOfUsedPSUs...");
+    int[] stateExample = {1, 1, 1, 0, 2, 3, 2};
+    compareInt(state.numOfUsedPSUs(stateExample), 4);
 
     //testing createNeighbours
     System.out.println("Testing method createNeighbours...");

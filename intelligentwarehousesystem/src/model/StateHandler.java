@@ -1,4 +1,4 @@
-package model;
+//package intelligentwarehousesystem.src.model;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -32,7 +32,7 @@ public class StateHandler {
    */
   public static StateHandler getInstance(){
     if(stateInstance == null){
-      System.out.println("Null Object returned. State has not yet been initialized with Warehouse.");
+      System.out.println("@StateHandler: Null Object returned. State has not yet been initialized with Warehouse.");
     }
     return stateInstance;
   }
@@ -73,7 +73,7 @@ public class StateHandler {
   public static int evaluate(int[] state){
     int result = -2;
     if(state.length < 1){
-      System.out.println("@State: An empty State cannot be evaluated");
+      System.out.println("@StateHandler: An empty State cannot be evaluated");
       return result;
     }
     Set<Integer> stateAsSet = new HashSet<Integer>();
@@ -81,13 +81,13 @@ public class StateHandler {
       if(state[i] == -1){
         return -1;
       }
-      stateAsSet.add(new Integer(state[i]));
+      stateAsSet.add(Integer.valueOf(state[i]));
     }
     //result is number of elements minus number of used sets
     result = state.length - stateAsSet.size();
     //for unexcpected other exceptions
     if(result == -2){
-      System.out.println("@State: For-Loop was not entered in the evaluate function.");
+      System.out.println("@StateHandler: For-Loop was not entered in the evaluate function.");
     }
     return result;
   }
@@ -104,10 +104,10 @@ public class StateHandler {
    * the beginning of the arraylist
 	 */
 	public ArrayList<int[]> createNeighbours(int[] currentState, boolean stopAtEndOfWarehouse){
-		System.out.println("@State: Starting to create Neighbours");
+		System.out.println("@StateHandler: Starting to create Neighbours");
     ArrayList<int[]> neighbours = new ArrayList<int[]>();
     if(order == null || order.length < 1){
-      System.out.println("@State: Order is empty or null. Set up the order before asking for neighbours.");
+      System.out.println("@StateHandler: Order is empty or null. Set up the order before asking for neighbours.");
     }
 
     for(int i = 0; i < order.length; i++){
@@ -139,7 +139,7 @@ public class StateHandler {
   public int[] generateRandomState(){
     Random randomGenerator = new Random();
     if(order == null || order.length < 1){
-      System.out.println("@State: Order is empty or null. Set up the order before creating a random state.");
+      System.out.println("@StateHandler: Order is empty or null. Set up the order before creating a random state.");
       return null;
     }
     int[] randomState = new int[order.length];
@@ -166,7 +166,7 @@ public class StateHandler {
    */
   public int[] generateInitialState() {
     if(order == null || order.length < 1){
-      System.out.println("@State: Order is empty or null. Set up the order before creating an initial state.");
+      System.out.println("@StateHandler: Order is empty or null. Set up the order before creating an initial state.");
       return null;
     }
     int[] initialState = new int[order.length];
@@ -206,7 +206,7 @@ public class StateHandler {
    */
   public int optimum(){
     if(order == null || order.length < 1){
-      System.out.println("@State: Order is empty or null. Optimum cannot be calculated without order.");
+      System.out.println("@StateHandler: Order is empty or null. Optimum cannot be calculated without order.");
     }
     return order.length - 1;
   }
@@ -220,12 +220,33 @@ public class StateHandler {
    */
   public boolean stateValid(int[] state){
     if(state == null || state.length < 1){
-      System.out.println("State is null or empty.");
+      System.out.println("@StateHandler: State is null or empty.");
       return false;
     }
     //we do that in order to reduce time complexity
     //of course we could also just use a for-loop instead
     List<Integer> list = Arrays.stream(state).boxed().collect(Collectors.toList());
     return (!list.contains(-1));
+  }
+
+  /**
+   *@return number of used PSUs in a state
+   *@param state of which we want to know the number of used PSUS
+   */
+  public int numOfUsedPSUs(int[] state){
+    int result;
+    Set<Integer> stateAsSet = new HashSet<Integer>();
+    for(int i = 0; i < state.length; i++){
+      if(state[i] == -1){
+        return -1;
+      }
+      stateAsSet.add(Integer.valueOf(state[i]));
+    }
+    result = stateAsSet.size();
+    if(stateAsSet.contains(Integer.valueOf(-1))){
+      result = result -1;
+      System.out.println("@StateHandler: Attention, State for which number of used PSUs was asked is not valid.")
+    }
+    return result;
   }
 }
