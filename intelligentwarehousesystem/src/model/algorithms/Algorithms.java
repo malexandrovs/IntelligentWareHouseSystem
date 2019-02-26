@@ -35,7 +35,7 @@ public class Algorithms{
     }
 
     for(int iteration = 0; iteration < 100; iteration ++){
-       List<int[]> neighbours = stateMethods.createNeighbours(finalState);
+       List<int[]> neighbours = stateMethods.createNeighbours(finalState, true);
 
        int[] bestNeighbour = theBestNeighbour(neighbours);
        int newValue = stateMethods.evaluate(bestNeighbour);
@@ -69,7 +69,7 @@ public class Algorithms{
 
     this.finalState = initState;
 
-    List<int[]> neighbours = stateMethods.createNeighbours(initState);
+    List<int[]> neighbours = stateMethods.createNeighbours(initState, true);
 
     int stateValue = stateMethods.evaluate(finalState);
 
@@ -133,7 +133,7 @@ public class Algorithms{
   	List<int[]> currentNeighbours = new ArrayList<>();
     //dont add initState
     //call that allNeighbours; makes things clearer for reader
-  	List<int[]> neighbours = stateMethods.createNeighbours(initState);
+  	List<int[]> neighbours = stateMethods.createNeighbours(initState, false);
 
   	int[] currentElement;
 
@@ -141,7 +141,7 @@ public class Algorithms{
 
   		for(int position = 0; position < numOfBeams; position ++){
   			currentElement = current.get(position);
-  			currentNeighbours = stateMethods.createNeighbours(currentElement);
+  			currentNeighbours = stateMethods.createNeighbours(currentElement, false);
   			neighbours.addAll(currentNeighbours);
   		}
 
@@ -227,7 +227,7 @@ public class Algorithms{
       //create neighbours for all current States
   		for(int position = 0; position < numOfBeams; position++){
   			currentElement = currentStates.get(position);
-  			currentNeighbours = stateMethods.createNeighbours(currentElement);
+  			currentNeighbours = stateMethods.createNeighbours(currentElement, false);
   			allNeighbours.addAll(currentNeighbours);
   		}
 
@@ -258,7 +258,7 @@ public class Algorithms{
         //add best neighbour
         bestNeighbours.add(bestElement);
         //remove best neighbour and restart the search
-        neighbours.remove(positionToRemove);
+        allNeighbours.remove(positionToRemove);
   		}
 
       //compare bestNeighbour with currentStates
@@ -319,7 +319,7 @@ public class Algorithms{
       for(int iteration = 0; iteration < 100; iteration ++){
          List<int[]> neighbours = new ArrayList<int[]>();
          //no cast needed!
-         neighbours = (ArrayList<int[]>) stateMethods.createNeighbours(initState);
+         neighbours = (ArrayList<int[]>) stateMethods.createNeighbours(initState, false);
          //do immediately:
          //List<int[]> neighbours = stateMethods.createNeighbours(initState);
 
@@ -371,15 +371,15 @@ public class Algorithms{
 
     for(int iteration = 0; iteration < 100; iteration++){
       //specify ArrayList<int[]>();
-      List<int[]> neighbours = new ArrayList<>();
-      neighbours= stateMethods.createNeighbours(initState);
+      List<int[]> neighbours = new ArrayList<int[]>();
+      neighbours= stateMethods.createNeighbours(initState, true);
       int stateValue = stateMethods.evaluate(initState);
 
       if(stateValue == stateMethods.optimum()){
         return finalState;
       }
 
-      //boolean betterNeighbourFound = false;
+      boolean betterNeighbourFound = false;
 
       int[] newState = neighbours.remove(0);
       //ACHTUNG das ist nicht das Konzept von firstChoiceHillClimbing!!!
@@ -403,7 +403,7 @@ public class Algorithms{
           //meinetwegen
           finalState = initState;
           //hier musst du aus der do while schleife raus!!!
-          //betterNeighbourFound = true;
+          betterNeighbourFound = true;
         }
         newState = neighbours.remove(0);
       }while(betterNeighbourFound || newState != null);
@@ -429,5 +429,5 @@ public class Algorithms{
      }
    }
    return currentBest;
-  }
+ }
 }
