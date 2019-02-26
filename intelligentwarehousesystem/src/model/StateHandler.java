@@ -1,4 +1,4 @@
-package model;
+//package intelligentwarehousesystem.src.model;
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -81,7 +81,7 @@ public class StateHandler {
       if(state[i] == -1){
         return -1;
       }
-      stateAsSet.add(new Integer(state[i]));
+      stateAsSet.add(Integer.valueOf(state[i]));
     }
     //result is number of elements minus number of used sets
     result = state.length - stateAsSet.size();
@@ -227,5 +227,20 @@ public class StateHandler {
     //of course we could also just use a for-loop instead
     List<Integer> list = Arrays.stream(state).boxed().collect(Collectors.toList());
     return (!list.contains(-1));
+  }
+
+  /**
+   *@return number of used PSUs in a state
+   *@param state of which we want to know the number of used PSUS
+   */
+  public int numOfUsedPSUs(int[] state){
+    Set<Integer> stateAsSet = new HashSet<Integer>();
+    for(int i = 0; i < state.length; i++){
+      if(state[i] == -1){
+        return -1;
+      }
+      stateAsSet.add(Integer.valueOf(state[i]));
+    }
+    return stateAsSet.size();
   }
 }
