@@ -1,7 +1,6 @@
-// package intelligentwarehousesystem.src;
-// import controller.WarehouseController;
-// import model.WareHouseModel;
-// import view.WareHouseView;
+import controller.WarehouseController;
+import model.WareHouseModel;
+import view.WareHouseView;
 /**
  * The Intelligent Warehouse System takes in information about a warehouse containing PSUs.
  * Each PSU has a set of items stored on it.

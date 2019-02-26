@@ -1,6 +1,7 @@
 package controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import model.WareHouseModel;
 import view.WareHouseView;
@@ -40,16 +41,16 @@ public class WarehouseController {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			String warehousePath = "";
+			File warehouseTxt;
 			
 			try {
-				warehousePath = theView.getWarehousePath();
+				warehouseTxt = theView.getWarehouse();
 				
 			} catch (Exception e) {
 				// TODO: handle exception
 			}
 			
-			theModel.setWarehouse(warehousePath);
+			theModel.setWarehouse(warehouseTxt);
 		}
 		
 	}
@@ -67,18 +68,19 @@ public class WarehouseController {
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			String order = "";
-			SearchAlg alg; //Better a String, because the view gives me only a string. 
-						   //How to get an Alg-Object from A string?
+			String[] order;
+			int alg;
+			int param;
 			
 			try {
 				order = theView.getOrder();
 				alg = theView.getAlg(); //See above
+				param = theView.getParam();
 			}catch(Exception ex) {
 				//TODO: Handle exception
 			}
 			
-			theModel.startSearch(alg, order);
+			theModel.startSearch(alg, param, order);
 			
 			try {
 				theView.displayResult(theModel.getResult());

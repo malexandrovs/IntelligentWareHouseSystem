@@ -1,11 +1,14 @@
 package model;
 
+import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import algorithms.Algorithms;
+import model.algorithms.Algorithms;
+import model.StateHandler;
 
 public class WareHouseModel {
 
@@ -33,7 +36,7 @@ public class WareHouseModel {
 			FileReader fr = new FileReader(warehouseTxt);
 			BufferedReader br = new BufferedReader(fr);
 		){
-			String[] itmes = br.readLine().split(" ");
+			String[] items = br.readLine().split(" ");
 			for (String item : items) {
 				wareHouse.put(item, new ArrayList<Integer>());
 			}
@@ -51,13 +54,13 @@ public class WareHouseModel {
 					}
 				}
 				line = br.readLine();
-				i++;	
+				psu++;	
 			}
 		} catch (IOException e) {
 			successful = false;
 		}
 		stateHandler = StateHandler.getInstance(wareHouse);
-		alg = new Algorithms(stateHandler);
+		algs = new Algorithms(stateHandler);
 
 		return successful;
  }
@@ -71,17 +74,17 @@ public class WareHouseModel {
 	public void startSearch(int alg, int param, String[] order) {
 		
 		stateHandler.setOrder(order);
-		int[] initialState = stateHandler.getInitialState();
+		// int[] initialState = stateHandler.generateInitialState();
 		switch (alg){
-			case 0: result = algs.hillClimbing(initialState);
+			case 0: result = algs.hillClimbing();
 				break;
-			case 1: result = algs.simmulatedAnnealing(initialState);
+			case 1: result = algs.simulatedAnnealing();
 				break;
-			case 2: result = algs.localBeam(initialState, param);
+			case 2: result = algs.localBeam(param);
 				break;
-			case 3: result = algs.randomRestartHillClimbin(initialState, param);
+			case 3: result = algs.randomRestartHillClimbing(param);
 				break;
-			case 4: result = firstChoiceHillClimbing(initialState);
+			case 4: result = algs.firstChioceHillClimbing();
 		}
 	}
 
