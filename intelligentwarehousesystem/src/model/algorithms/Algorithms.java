@@ -10,7 +10,6 @@ public class Algorithms{
    *@return State, which describes the local optimal result
    *
    */
-
   int[] finalState;
   State stateMethods = State.getInstance();
 
@@ -20,50 +19,40 @@ public class Algorithms{
 
     finalState = initState;
 
-     List<int[]> neighbours = new ArrayList<int[]>();
-     neighbours = (ArrayList<int[]>) stateMethods.createNeighbours(initState);
-     //ceate neighbours of initial State
+    for(int iterations = 0; iterations < 100; iterations ++){
+       List<int[]> neighbours = new ArrayList<int[]>();
+       neighbours = (ArrayList<int[]>) stateMethods.createNeighbours(initState);
+       //ceate neighbours of initial State
 
-     int stateValue = stateMethods.evaluate(initState);
-     //evaluate inital State
+       int stateValue = stateMethods.evaluate(initState);
+       //evaluate inital State
 
-     if(stateValue == stateMethods.optimum()){
-       return finalState;
-     }
-     //check wether current value is already the optimal value
-
-     int[] newState = neighbours.remove(0);
-
-    do{
-
-       if(newState == null){
-         finalState = initState;
+       if(stateValue == stateMethods.optimum()){
          return finalState;
        }
-       //checking if the neighbour list is empty
+       //check wether current value is already the optimal value
 
-       int newValue = stateMethods.evaluate(newState);
-       //evaluate next neighbour
+       int[] bestNeighbour = theBestNeighbour(neighbours);
+       int newValue = stateMethods.evaluate(bestNeighbour);
+       //evaluate best neighbour
 
        if(newValue == stateMethods.optimum()){
-         finalState = newState;
+         finalState = bestNeighbour;
          return finalState;
        }
        //check neighbour for optimality
 
-       if(newValue >= stateValue){
-         stateValue = newValue;
-         initState = newState;
+       if(newValue <= stateValue){
+         finalState = initState;
+         return finalState;
        }
        //replace the initial state with the neigbour, if the evaluation value is better
 
-       //neighbours.removeHead();
-       //delete head of the neighbour list to get next neighbour
+       initState = bestNeighbour;
+       stateValue = newValue;
+       finalState = initState;
+    }
 
-       newState = neighbours.remove(0);
-
-
-     } while(newState != null);
 
      return finalState;
   }
@@ -356,6 +345,24 @@ public class Algorithms{
 
     return finalState;
  }
+
+
+ public int[] theBestNeighbour(List<int[]> neighbours){
+   int[] currentBest = neighbours.get(0);
+   int currentBestValue = stateMethods.evaluate(currentBest);
+   int newValue = 0;
+   int[] newState;
+
+   for(int position = 1; position < neighbours.size(); position ++){
+     newState = neighbours.get(position);
+     if(currentBestValue < stateMethods.evaluate(newState)){
+       currentBest = newState;
+       currentBestValue = newValue;
+     }
+   }
+   return currentBest;
+ }
+ //we use this to compute the best neighbour for Hill Climbing
 
 
 
