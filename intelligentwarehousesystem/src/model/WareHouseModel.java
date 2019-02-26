@@ -12,7 +12,7 @@ public class WareHouseModel {
 	// private String order;
 	private Algorithms algs;
 	private HashMap<String, ArrayList<Integer>> wareHouse;
-	private String result;
+	private int [] result;
 	private StateHandler stateHandler;
 
 	public WareHouseModel(){
