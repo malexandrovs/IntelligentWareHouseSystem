@@ -15,6 +15,7 @@ public class WareHouseModel {
 	// private String order;
 	private Algorithms algs;
 	private HashMap<String, ArrayList<Integer>> wareHouse;
+	private HashMap<Integer, String[]> psus;
 	private int [] result;
 	private StateHandler stateHandler;
 
@@ -23,6 +24,7 @@ public class WareHouseModel {
 	 */
 	public WareHouseModel(){
 		wareHouse = new HashMap<String, ArrayList<Integer>>();
+		psus = new HashMap<Integer,String[]>();
 	}
 
 	/**
@@ -42,6 +44,7 @@ public class WareHouseModel {
 		){
 			System.out.println("done");
 			String[] items = br.readLine().split(" ");
+			psus.put(psu, items);
 			for (String item : items) {
 				wareHouse.put(item, new ArrayList<Integer>());
 			}
@@ -72,15 +75,31 @@ public class WareHouseModel {
 		return successful;
  }
 
+ 	public String initOrder(String[] order){
+		stateHandler.setOrder(order);
+		int[] aState = stateHandler.generateInitialState();
+		if(stateHandler.stateValid(aState)){
+			return "order accepted";
+		} else{
+			String unknownItems = "";
+			for (int i = 0; i < aState.length; i++) {
+				if (aState[i] == -1) {
+					unknownItems = unknownItems + order[i] + " ";
+				}
+			}
+			return unknownItems;
+		}
+	 }
+
  	/**
 	  * Method to coordinate the actual search process.
 	  * @param alg is the code for the search algorithm.
 	  * @param param is the optional parameter that depends on the search algorithm
 	  * @param order
 	  */
-	public void startSearch(int alg, int param, String[] order) {
+	public void startSearch(int alg, int param) {
 
-		stateHandler.setOrder(order);
+		// stateHandler.setOrder(order);
 		// int[] initialState = stateHandler.generateInitialState();
 		// boolean orderValid = stateHandler.stateValid(initialState);
 		// if(!orderValid){ tell the user -> he should change the order

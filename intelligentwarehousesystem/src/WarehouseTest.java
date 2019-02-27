@@ -9,7 +9,9 @@ public class WarehouseTest{
         try{
 
             File warehouseTxt = new File("/home/ma/git/IntelligentWareHouseSystem/intelligentwarehousesystem/src/resources/problem1.txt");
+            // File orderTxt = new File("/home/ma/git/IntelligentWareHouseSystem/intelligentwarehousesystem/src/resources/invalidOrder.txt");
             File orderTxt = new File("/home/ma/git/IntelligentWareHouseSystem/intelligentwarehousesystem/src/resources/order11.txt");
+
             BufferedReader br = new BufferedReader(new FileReader(orderTxt));
 
 
@@ -21,14 +23,22 @@ public class WarehouseTest{
         System.out.println(warehouseSet);
         String[] order = br.readLine().split(" ");
 
-        warehouse.startSearch(0,-1, order);
+        String orderValid = warehouse.initOrder(order);
+        if (orderValid.equals("order accepted")) {
+            warehouse.startSearch(0,-1);
 
-        int[] result = warehouse.getResult();
-
-        for (int psu : result) {
-            System.out.print(psu);
+            int[] result = warehouse.getResult();
+    
+            for (int psu : result) {
+                System.out.print(psu);
+            }
+            System.out.print("\n");
+        } else {
+            System.out.println("Your order had some unaccepted items: \n" + orderValid);
         }
-        System.out.print("\n");
+
+
+
         } catch(IOException e){
             e.printStackTrace();
         }
