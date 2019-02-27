@@ -17,7 +17,7 @@ public class WareHouseModel {
 	private Algorithms algs;
 	private HashMap<String, ArrayList<Integer>> wareHouse;
 	private HashMap<Integer, String[]> psus;
-	private int [] result;
+	private int [] optimum;
 	private StateHandler stateHandler;
 
 	/**
@@ -104,15 +104,15 @@ public class WareHouseModel {
 		// if(!orderValid){ tell the user -> he should change the order
 	  	// and dont do any search (? or we remove the items which are not valid?)}
 		switch (alg){
-			case 0: result = algs.hillClimbing();
+			case 0: optimum = algs.hillClimbing();
 				break;
-			case 1: result = algs.simulatedAnnealing();
+			case 1: optimum = algs.simulatedAnnealing();
 				break;
-			case 2: result = algs.localBeam(param);
+			case 2: optimum = algs.localBeam(param);
 				break;
-			case 3: result = algs.randomRestartHillClimbing(param);
+			case 3: optimum = algs.randomRestartHillClimbing(param);
 				break;
-			case 4: result = algs.firstChoiceHillClimbing();
+			case 4: optimum = algs.firstChoiceHillClimbing();
 			//default case missing -> System.err.println("@WareHouseModel: No valid Algorithm was given.")
 		}
 	}
@@ -121,11 +121,13 @@ public class WareHouseModel {
 	/**get PSU number
 	 *@return String with elements
   	 */
-	public int[] getResult() {
-		//anzahl der PSUs used
-		//all used Psus identifiers
-		//
+	public String getResult() {
+		stateHandler.showUsedPSUs(optimum);
+
 		return result;
+	}
+	public HashMap getWarehouse() {
+		return wareHouse;
 	}
 
 }
