@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import model.algorithms.Algorithms;
+import model.Algorithms;
 import model.StateHandler;
 
 public class WareHouseModel {
