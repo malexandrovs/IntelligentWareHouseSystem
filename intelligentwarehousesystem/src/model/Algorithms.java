@@ -209,7 +209,7 @@ public class Algorithms{
     return theBestNeighbour(current);
   }
   
-    //diesmal habe ich nur sehr wenig ausgebessert.
+        //diesmal habe ich nur sehr wenig ausgebessert.
   public int[] localBeamJuliaCut(int numOfBeams){
     List<int[]> currentStates = new ArrayList<int[]>();
     //creating randomStates
@@ -235,10 +235,10 @@ public class Algorithms{
 
       //find the best neighbours
 
-      List<Integer> allValues = new ArrayList<int[]>();
+      List<Integer> allValues = new ArrayList<Integer>();
       //create allValues of allNeighbours
       for(int[] neighbour : allNeighbours){
-        value = stateMethods.evaluate(neighbour);
+        int value = stateMethods.evaluate(neighbour);
         allValues.add(Integer.valueOf(value));
       }
       List<int[]> bestNeighbours = new ArrayList<int[]>();
@@ -246,7 +246,7 @@ public class Algorithms{
       Integer bestValue;
       //we find the maximum (best neighbour) of our ArrayList as often as we want
       for(int i = 0; i < numOfBeams; i++){
-        Integer max = Collection.max(allValues);
+        Integer max = Collections.max(allValues);
         int indexOfMax = allValues.indexOf(max);
         bestState = allNeighbours.remove(indexOfMax);
         bestValue = allValues.remove(indexOfMax);
@@ -259,14 +259,14 @@ public class Algorithms{
       int[] element;
       int elementValue;
       //summarize currentState Values
-      for(int position = 1; position < currentStates.size(); position ++){
-        element = currentStates.get(position -1);
+      for(int position = 0; position < currentStates.size(); position ++){
+        element = currentStates.get(position);
         elementValue = stateMethods.evaluate(element);
         allCurrentValues = allCurrentValues + elementValue;
       }
       //summarize best neighbour states values
-      for(int position = 1; position < bestNeighbours.size(); position ++){
-        element = bestNeighbours.get(position -1);
+      for(int position = 0; position < bestNeighbours.size(); position ++){
+        element = bestNeighbours.get(position);
         elementValue = stateMethods.evaluate(element);
         allBestNeighbourValues = allBestNeighbourValues + elementValue;
       }
