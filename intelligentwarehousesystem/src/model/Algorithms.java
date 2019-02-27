@@ -148,8 +148,9 @@ public class Algorithms{
 
   	for(int iteration = 0; iteration < 100; iteration ++){
 
+  	for(int iteration = 0; iteration < 100; iteration ++){
 
-  		for(int position = 0; position < numOfBeams; position ++){
+  		for(int position = 0; position < current.size(); position ++){
   			currentElement = current.get(position);
   			currentNeighbours = stateMethods.createNeighbours(currentElement,false);
   			allNeighbours.addAll(currentNeighbours);
@@ -269,9 +270,6 @@ public class Algorithms{
 
       int stateValue = stateMethods.evaluate(finalState);
 
-      if(stateValue == stateMethods.optimum()){
-        return finalState;
-      }
 
       int[] newState = neighbours.remove(0);
       boolean betterNeighbourFound = false;
@@ -286,8 +284,10 @@ public class Algorithms{
           this.finalState = newState;
           betterNeighbourFound = true;
         }
-        newState = neighbours.remove(0);
-      }while(!betterNeighbourFound||newState != null);
+        newState = neighbours.get(0);
+        neighbours.remove(0);
+      }
+      return this.finalState;
     }
 
     return finalState;
@@ -303,6 +303,9 @@ public class Algorithms{
   */
 
   public int[] theBestNeighbour(List<int[]> neighbours){
+    if(neighbours.isEmpty()){
+      int[] empty = new int[0];
+    }
    int[] currentBest = neighbours.get(0);
    int currentBestValue = stateMethods.evaluate(currentBest);
    int newValue = 0;
