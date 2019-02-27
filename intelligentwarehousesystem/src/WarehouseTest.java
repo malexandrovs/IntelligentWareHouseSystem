@@ -8,41 +8,31 @@ public class WarehouseTest{
     public static void main(String[] args) {
         try{
 
-            File warehouseTxt = new File("/home/ma/git/IntelligentWareHouseSystem/intelligentwarehousesystem/src/resources/problem1.txt");
-            // File orderTxt = new File("/home/ma/git/IntelligentWareHouseSystem/intelligentwarehousesystem/src/resources/invalidOrder.txt");
-            File orderTxt = new File("/home/ma/git/IntelligentWareHouseSystem/intelligentwarehousesystem/src/resources/order11.txt");
-
+            File warehouseTxt = new File("/Users/Dell/Documents/Files/University/3.Semester/MoAI/IntelligentWareHouseSystem-CurrentFinal/IntelligentWareHouseSystem-master/intelligentwarehousesystem/src/resources/problem1.txt");
+            File orderTxt = new File("C:/Users/Dell/Documents/Files/University/3.Semester/MoAI/IntelligentWareHouseSystem-CurrentFinal/IntelligentWareHouseSystem-master/intelligentwarehousesystem/src/resources/order11.txt");
             BufferedReader br = new BufferedReader(new FileReader(orderTxt));
 
 
-        
-            System.out.println(warehouseTxt.exists());
+
+        System.out.println(warehouseTxt.exists());
         WareHouseModel warehouse = new WareHouseModel();
-        
+
         boolean warehouseSet = warehouse.setWarehouse(warehouseTxt);
         System.out.println(warehouseSet);
         String[] order = br.readLine().split(" ");
 
-        warehouse.initOrder(order);
-        
-        warehouse.startSearch(2,4);
+        warehouse.startSearch(0,-1, order);
 
-        // int[] result = warehouse.getResult();
-    
-        // System.out.println();
-        // for (int psu : result) {
-        //     System.out.println(psu);
-        // }
+        int[] result = warehouse.getResult();
 
-        String result = warehouse.getResult();
-
-        System.out.println(result);
+        for (int psu : result) {
+            System.out.print(psu);
+        }
+        System.out.print("\n");
         } catch(IOException e){
             e.printStackTrace();
-        } catch(InvalidOrderException e){
-            System.out.println("Your order had some unaccepted items: \n" + e.getInvalidItems());
         }
-        
-        
+
+
     }
 }
