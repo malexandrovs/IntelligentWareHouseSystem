@@ -1,4 +1,4 @@
-package model.algorithms;
+package model;
 import java.util.*;
 import model.StateHandler;
 

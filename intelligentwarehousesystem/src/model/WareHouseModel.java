@@ -9,6 +9,7 @@ import java.util.HashMap;
 
 import model.Algorithms;
 import model.StateHandler;
+import model.InvalidOrderException;
 
 public class WareHouseModel {
 
@@ -75,19 +76,17 @@ public class WareHouseModel {
 		return successful;
  }
 
- 	public String initOrder(String[] order){
+ 	public void initOrder(String[] order) throws InvalidOrderException{
 		stateHandler.setOrder(order);
 		int[] aState = stateHandler.generateInitialState();
-		if(stateHandler.stateValid(aState)){
-			return "order accepted";
-		} else{
+		if(!stateHandler.stateValid(aState)){
 			String unknownItems = "";
 			for (int i = 0; i < aState.length; i++) {
 				if (aState[i] == -1) {
 					unknownItems = unknownItems + order[i] + " ";
 				}
 			}
-			return unknownItems;
+			throw new InvalidOrderException(unknownItems);
 		}
 	 }
 

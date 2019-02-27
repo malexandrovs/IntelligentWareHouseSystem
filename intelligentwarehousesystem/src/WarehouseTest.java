@@ -9,8 +9,8 @@ public class WarehouseTest{
         try{
 
             File warehouseTxt = new File("/home/ma/git/IntelligentWareHouseSystem/intelligentwarehousesystem/src/resources/problem1.txt");
-            // File orderTxt = new File("/home/ma/git/IntelligentWareHouseSystem/intelligentwarehousesystem/src/resources/invalidOrder.txt");
-            File orderTxt = new File("/home/ma/git/IntelligentWareHouseSystem/intelligentwarehousesystem/src/resources/order11.txt");
+            File orderTxt = new File("/home/ma/git/IntelligentWareHouseSystem/intelligentwarehousesystem/src/resources/invalidOrder.txt");
+            // File orderTxt = new File("/home/ma/git/IntelligentWareHouseSystem/intelligentwarehousesystem/src/resources/order11.txt");
 
             BufferedReader br = new BufferedReader(new FileReader(orderTxt));
 
@@ -23,24 +23,22 @@ public class WarehouseTest{
         System.out.println(warehouseSet);
         String[] order = br.readLine().split(" ");
 
-        String orderValid = warehouse.initOrder(order);
-        if (orderValid.equals("order accepted")) {
-            warehouse.startSearch(0,-1);
+        warehouse.initOrder(order);
+        
+        warehouse.startSearch(0,-1);
 
-            int[] result = warehouse.getResult();
+        int[] result = warehouse.getResult();
     
-            for (int psu : result) {
-                System.out.print(psu);
-            }
-            System.out.print("\n");
-        } else {
-            System.out.println("Your order had some unaccepted items: \n" + orderValid);
+        System.out.println();
+        for (int psu : result) {
+            System.out.println(psu);
         }
-
 
 
         } catch(IOException e){
             e.printStackTrace();
+        } catch(InvalidOrderException e){
+            System.out.println("Your order had some unaccepted items: \n" + e.getInvalidItems());
         }
         
         
