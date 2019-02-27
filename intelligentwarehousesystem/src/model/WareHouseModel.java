@@ -18,6 +18,9 @@ public class WareHouseModel {
 	private int [] result;
 	private StateHandler stateHandler;
 
+	/**
+	 * Constructor of WareHouseModel
+	 */
 	public WareHouseModel(){
 		wareHouse = new HashMap<String, ArrayList<Integer>>();
 	}
@@ -26,6 +29,7 @@ public class WareHouseModel {
 	 * Method to build the Warehouse representation. It receives a File-Object with the Warehouse.txt and builds
 	 * a HashMap with the Items as keys and the ArrayLists of PSUs that contain the items as values.
 	 *@return boolean true if setWarehouse was successful, false otherwise.
+	 *@param MISSING
 	 */
 	public boolean setWarehouse(File warehouseTxt){
 
@@ -35,7 +39,6 @@ public class WareHouseModel {
 		try (
 			FileReader fr = new FileReader(warehouseTxt);
 			BufferedReader br = new BufferedReader(fr);
-			
 		){
 			System.out.println("done");
 			String[] items = br.readLine().split(" ");
@@ -56,13 +59,14 @@ public class WareHouseModel {
 					}
 				}
 				line = br.readLine();
-				psu++;	
+				psu++;
 			}
 		} catch (IOException e) {
 			System.out.println(psu);
 			successful = false;
 		}
-		stateHandler = StateHandler.getInstance(wareHouse);
+		//j: Changed Class -> no singleton anymore, I changed your call accordingly
+		stateHandler = new StateHandler(wareHouse);
 		algs = new Algorithms(stateHandler);
 
 		return successful;
@@ -75,9 +79,12 @@ public class WareHouseModel {
 	  * @param order
 	  */
 	public void startSearch(int alg, int param, String[] order) {
-		
+
 		stateHandler.setOrder(order);
 		// int[] initialState = stateHandler.generateInitialState();
+		// boolean orderValid = stateHandler.stateValid(initialState);
+		// if(!orderValid){ tell the user -> he should change the order
+	  	// and dont do any search (? or we remove the items which are not valid?)}
 		switch (alg){
 			case 0: result = algs.hillClimbing();
 				break;
@@ -88,13 +95,14 @@ public class WareHouseModel {
 			case 3: result = algs.randomRestartHillClimbing(param);
 				break;
 			case 4: result = algs.firstChoiceHillClimbing();
+			//default case missing -> System.err.println("@WareHouseModel: No valid Algorithm was given.")
 		}
 	}
 
-
-	//get PSU number
-	//returns String with elements
-
+	//j: not done yet?
+	/**get PSU number
+	 *@return String with elements
+  	 */
 	public int[] getResult() {
 		//anzahl der PSUs used
 		//all used Psus identifiers
