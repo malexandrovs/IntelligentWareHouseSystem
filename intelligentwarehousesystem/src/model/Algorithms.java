@@ -24,9 +24,7 @@ public class Algorithms{
   * @return we return the best state our search algorithm has found
   */
   public int[] hillClimbing(){
-    int[] initState = stateMethods.generateInitialState();
-
-    this.finalState = initState;
+    this.finalState = stateMethods.generateRandomState();
 
     int stateValue = stateMethods.evaluate(finalState);
 
@@ -35,7 +33,7 @@ public class Algorithms{
     }
 
     for(int iteration = 0; iteration < 100; iteration ++){
-       List<int[]> neighbours = stateMethods.createNeighbours(finalState);
+       List<int[]> neighbours = stateMethods.createNeighbours(finalState, false);
 
        int[] bestNeighbour = theBestNeighbour(neighbours);
        int newValue = stateMethods.evaluate(bestNeighbour);
@@ -45,7 +43,7 @@ public class Algorithms{
        }
 
        if(newValue <= stateValue){
-         return initState;
+         return finalState;
        }
 
        this.finalState = bestNeighbour;
@@ -63,13 +61,10 @@ public class Algorithms{
 
   public int[] simulatedAnnealing(){
 
-    int[] initState = stateMethods.generateInitialState();
+    this.finalState = stateMethods.generateInitialState();
     int temperature = 100;
 
-
-    this.finalState = initState;
-
-    List<int[]> neighbours = stateMethods.createNeighbours(initState);
+    List<int[]> neighbours = stateMethods.createNeighbours(finalState, true);
 
     int stateValue = stateMethods.evaluate(finalState);
 
@@ -119,7 +114,7 @@ public class Algorithms{
 
   public int[] localBeam(int numOfBeams){
 
-    List<int[]> current = new ArrayList<>();
+    List<int[]> current = new ArrayList<int[]>();
 
 
   	for(int randomState = 0; randomState < numOfBeams; randomState ++){
@@ -130,8 +125,8 @@ public class Algorithms{
   	}
 
 
-  	List<int[]> currentNeighbours = new ArrayList<>();
-  	List<int[]> allNeighbours = new ArrayList<>();
+  	List<int[]> currentNeighbours = new ArrayList<int[]>();
+  	List<int[]> allNeighbours = new ArrayList<int[]>();
 
   	int[] currentElement;
 
@@ -147,7 +142,7 @@ public class Algorithms{
 
   		int[] bestElement;
   		int bestValue;
-  		List<int[]> bestNeighbours = new ArrayList<>();
+  		List<int[]> bestNeighbours = new ArrayList<int[]>();
   		int[] nextElement;
   		int nextValue;
       int positionToRemove;
@@ -208,77 +203,6 @@ public class Algorithms{
   	}
     return theBestNeighbour(current);
   }
-  
-        //diesmal habe ich nur sehr wenig ausgebessert.
-  public int[] localBeamJuliaCut(int numOfBeams){
-    List<int[]> currentStates = new ArrayList<int[]>();
-    //creating randomStates
-  	for(int randomState = 0; randomState < numOfBeams; randomState ++){
-  		int[] newRandomState = stateMethods.generateRandomState();
-  		currentStates.add(newRandomState);
-  	}
-
-  	List<int[]> currentNeighbours = new ArrayList<int[]>();
-  	int[] currentElement;
-
-    //starting the iteration
-  	for(int iteration = 0; iteration < 100; iteration++){
-      //muss hier drinne sein, damit die Liste jedes mal erneuert wird,
-      //wenn die neue Iteration beginnt
-      List<int[]> allNeighbours = new ArrayList<int[]>();
-      //create neighbours for all current States
-  		for(int position = 0; position < numOfBeams; position++){
-  			currentElement = currentStates.get(position);
-  			currentNeighbours = stateMethods.createNeighbours(currentElement, false);
-  			allNeighbours.addAll(currentNeighbours);
-  		}
-
-      //find the best neighbours
-
-      List<Integer> allValues = new ArrayList<Integer>();
-      //create allValues of allNeighbours
-      for(int[] neighbour : allNeighbours){
-        int value = stateMethods.evaluate(neighbour);
-        allValues.add(Integer.valueOf(value));
-      }
-      List<int[]> bestNeighbours = new ArrayList<int[]>();
-      int[] bestState;
-      Integer bestValue;
-      //we find the maximum (best neighbour) of our ArrayList as often as we want
-      for(int i = 0; i < numOfBeams; i++){
-        Integer max = Collections.max(allValues);
-        int indexOfMax = allValues.indexOf(max);
-        bestState = allNeighbours.remove(indexOfMax);
-        bestValue = allValues.remove(indexOfMax);
-        bestNeighbours.add(bestState);
-      }
-
-      //compare bestNeighbour with currentStates
-      int allCurrentValues = 0;
-      int allBestNeighbourValues = 0;
-      int[] element;
-      int elementValue;
-      //summarize currentState Values
-      for(int position = 0; position < currentStates.size(); position ++){
-        element = currentStates.get(position);
-        elementValue = stateMethods.evaluate(element);
-        allCurrentValues = allCurrentValues + elementValue;
-      }
-      //summarize best neighbour states values
-      for(int position = 0; position < bestNeighbours.size(); position ++){
-        element = bestNeighbours.get(position);
-        elementValue = stateMethods.evaluate(element);
-        allBestNeighbourValues = allBestNeighbourValues + elementValue;
-      }
-
-      if(allBestNeighbourValues > allCurrentValues){
-        currentStates = bestNeighbours;
-      } else {
-        return theBestNeighbour(currentStates);
-      }
-  	}
-    return theBestNeighbour(currentStates);
-  }
 
 
   /**
@@ -290,49 +214,19 @@ public class Algorithms{
   public int[] randomRestartHillClimbing(int iterations){
 
     this.finalState = stateMethods.generateRandomState();
-    int[] firstfinalState = finalState;
+    int[] newState;
     int finalValue = 0;
-    int stateValue = 0;
-
-
-    boolean firstRun = true;
+    int newValue = 0;
 
     for(int run = 0; run < iterations; run++){
 
-      if(firstRun != true){
-        firstfinalState = stateMethods.generateRandomState();
-      }
+      newState = hillClimbing();
 
-      for(int iteration = 0; iteration < 100; iteration ++){
-         List<int[]> neighbours = stateMethods.createNeighbours(firstfinalState, false);
-
-         stateValue = stateMethods.evaluate(firstfinalState);
-
-
-         if(stateValue == stateMethods.optimum()){
-           return firstfinalState;
-         }
-
-
-         int[] bestNeighbour = theBestNeighbour(neighbours);
-         int newValue = stateMethods.evaluate(bestNeighbour);
-
-
-         if(newValue == stateMethods.optimum()){
-           return bestNeighbour;
-         }
-
-
-         if(newValue >= stateValue){
-           firstfinalState = bestNeighbour;
-         }
-
-      }
       finalValue = stateMethods.evaluate(finalState);
-      if(stateMethods.evaluate(firstfinalState) > finalValue){
-        finalState = firstfinalState;
+      newValue = stateMethods.evaluate(newState);
+      if(newValue > finalValue){
+        finalState = newState;
       }
-      firstRun = false;
     }
 
     return finalState;
@@ -350,7 +244,7 @@ public class Algorithms{
     this.finalState = stateMethods.generateRandomState();
 
     for(int iteration = 0; iteration < 100; iteration ++){
-      List<int[]> neighbours = new ArrayList<>();
+      List<int[]> neighbours = new ArrayList<int[]>();
       neighbours= stateMethods.createNeighbours(finalState, false);
 
       int stateValue = stateMethods.evaluate(finalState);
@@ -360,20 +254,20 @@ public class Algorithms{
       }
 
       int[] newState = neighbours.remove(0);
-
+      boolean bestNeighbourFound = false;
       do{
         if(newState == null){
-          finalState = initState;
-          return finalState;
+          return this.finalState;
         }
 
         int newValue = stateMethods.evaluate(newState);
 
         if(newValue >= stateValue){
           this.finalState = newState;
+          bestNeighbourFound = true;
         }
         newState = neighbours.remove(0);
-      }while(newState != null);
+      }while(!bestNeighbourFound||newState != null);
     }
 
     return finalState;
