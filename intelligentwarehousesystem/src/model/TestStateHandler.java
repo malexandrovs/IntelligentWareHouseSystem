@@ -45,18 +45,24 @@ public class TestStateHandler{
       put("8b", new ArrayList<Integer>(Arrays.asList(1, 8)));
       put("8c", new ArrayList<Integer>(Arrays.asList(8)));
     }};
-    StateHandler state = StateHandler.getInstance(warehouse);
+
 
     String[] order1 = new String[]{"3a", "4b", "5c"};
     String[] order2 = new String[]{"8a", "8b", "8c"};
     String[] order3 = new String[]{"bla", "0a", "blubb"};
     String[] order4 = new String[]{};
     String[] order5 = null;
-    
+
+    StateHandler state = new StateHandler(warehouse, order1);
+
     //testing numberOfUsedPSUs
     System.out.println("Testing method numberOfUsedPSUs...");
     int[] stateExample = {1, 1, 1, 0, 2, 3, 2};
     compareInt(state.numOfUsedPSUs(stateExample), 4);
+
+    System.out.println("Testing method showUsedPSUs...");
+    int[] expectedResultStateExample = {0, 1, 2, 3};
+    compareInts(state.showUsedPSUs(stateExample), expectedResultStateExample);
 
     //testing createNeighbours
     System.out.println("Testing method createNeighbours...");
