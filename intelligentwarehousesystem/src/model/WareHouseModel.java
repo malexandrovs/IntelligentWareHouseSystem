@@ -130,4 +130,12 @@ public class WareHouseModel {
 		return wareHouse;
 	}
 
+	public StateHandler getStateHandler() {
+		return stateHandler;
+	}
+
+	public Algorithms getAlgorithms() {
+		return algs;
+	}
+
 }
