@@ -82,7 +82,7 @@ public class Algorithms{
 
     //we perform simulated annealing until our temperature reaches 0
     for(int i = temperature; i > 0; i = temperature - 5){
-
+      temperature = temperature - 5;
       for(int j = 0; j < neighbours.size(); j++){
         int[] newState = neighbours.get(j);
 
@@ -109,7 +109,7 @@ public class Algorithms{
           stateValue = newValue;
         }
       }
-      temperature = temperature - 5;
+     
     }
     return finalState;
   }
