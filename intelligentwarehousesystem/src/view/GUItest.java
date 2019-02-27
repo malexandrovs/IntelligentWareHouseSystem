@@ -1,9 +1,8 @@
 //most of this code is auto-generated using eclipse
-// i will proceed to mark the stuff that isn't auto-generated with comments for your viewing pleasure
+// some things are in comments because they should work in theory but eclipse won't let me look at the GUI if they are there
 //things that are still missing:
 // - proper error-handling
-// - an idea how to send all the data previously collected through buttons n' stuff when pressing the single submit button
-//(tho im currently trying to figure that out)
+
 
 
 package guitest;
@@ -24,13 +23,15 @@ import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
 import javax.swing.JFileChooser;
-import javax.swing.fileChooser.FileNameExtensionFilter;
+//import javax.swing.fileChooser.FileNameExtensionFilter;
 
-public class guitest extends JFrame {
+public class Guitest extends JFrame {
 
 	private JPanel contentPane;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private final javax.swing.JFileChooser openFileChooser;
+	private final JFileChooser openFileChooser;
+	private fileWarehouse;
+	private fileOrder;
 	/**
 	 * Launch the application.
 	 */
@@ -50,7 +51,7 @@ public class guitest extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public guitest() {
+	public Guitest() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 666, 472);
 		contentPane = new JPanel();
@@ -58,90 +59,87 @@ public class guitest extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-    //added the filechooser manuelly to pop up when a certain button is activated, see below
-		openFileChooser = new JFileChooser();
-		openFileChooser.setFileFilter(new FileNameExtensionFilter("TXT files", "txt"));
+		//openFileChooser = new JFileChooser();
+		//openFileChooser.setFileFilter(new FileNameExtensionFilter("TXT files", "txt"));
 		
 		JLabel TextLabelWelcome = new JLabel("Welcome to the IntelligentWareHouseApp!");
 		TextLabelWelcome.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		TextLabelWelcome.setBounds(142, 10, 346, 24);
 		contentPane.add(TextLabelWelcome);
 		
-		JLabel TextLabelWarehouse = new JLabel("Please select a Warehouse:");
-		TextLabelWarehouse.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		TextLabelWarehouse.setBounds(10, 55, 176, 13);
-		contentPane.add(TextLabelWarehouse);
+		JLabel textLabelWarehouse = new JLabel("Please select a Warehouse:");
+		textLabelWarehouse.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textLabelWarehouse.setBounds(10, 55, 176, 13);
+		contentPane.add(textLabelWarehouse);
 		
-		JLabel TextLabelOrder = new JLabel("Please select an order:");
-		TextLabelOrder.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		TextLabelOrder.setBounds(10, 83, 157, 25);
-		contentPane.add(TextLabelOrder);
+		JLabel textLabelOrder = new JLabel("Please select an order:");
+		textLabelOrder.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textLabelOrder.setBounds(10, 83, 157, 25);
+		contentPane.add(textLabelOrder);
 		
-		JLabel TextLabelAlgo = new JLabel("Please select an algorithm:");
-		TextLabelAlgo.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		TextLabelAlgo.setBounds(10, 139, 176, 19);
-		contentPane.add(TextLabelAlgo);
+		JLabel textLabelAlgo = new JLabel("Please select an algorithm:");
+		textLabelAlgo.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		textLabelAlgo.setBounds(10, 139, 176, 19);
+		contentPane.add(textLabelAlgo);
 		
-		JRadioButton RButtonHC = new JRadioButton("Hill-Climbing");
-		buttonGroup.add(RButtonHC);
-		RButtonHC.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		RButtonHC.setBounds(214, 138, 105, 21);
-		contentPane.add(RButtonHC);
+		JRadioButton rButtonHC = new JRadioButton("Hill-Climbing");
+		buttonGroup.add(rButtonHC);
+		rButtonHC.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		rButtonHC.setBounds(214, 138, 105, 21);
+		contentPane.add(rButtonHC);
 		
-		JRadioButton RButtonFCHC = new JRadioButton("First Choice Hill Climbing");
-		buttonGroup.add(RButtonFCHC);
-		RButtonFCHC.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		RButtonFCHC.setBounds(214, 161, 194, 21);
-		contentPane.add(RButtonFCHC);
+		JRadioButton rButtonFCHC = new JRadioButton("First Choice Hill Climbing");
+		buttonGroup.add(rButtonFCHC);
+		rButtonFCHC.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		rButtonFCHC.setBounds(214, 161, 194, 21);
+		contentPane.add(rButtonFCHC);
 		
-		JRadioButton RButtonSA = new JRadioButton("Simulated Annealing");
-		buttonGroup.add(RButtonSA);
-		RButtonSA.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		RButtonSA.setBounds(214, 184, 157, 21);
-		contentPane.add(RButtonSA);
+		JRadioButton rButtonSA = new JRadioButton("Simulated Annealing");
+		buttonGroup.add(rButtonSA);
+		rButtonSA.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		rButtonSA.setBounds(214, 184, 157, 21);
+		contentPane.add(rButtonSA);
 		
-		JRadioButton RButtonRR = new JRadioButton("Random Restart");
-		RButtonRR.addActionListener(new ActionListener() {
+		JRadioButton rButtonRR = new JRadioButton("Random Restart");
+		rButtonRR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 			}
 		});
-		buttonGroup.add(RButtonRR);
-		RButtonRR.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		RButtonRR.setBounds(214, 207, 135, 21);
-		contentPane.add(RButtonRR);
+		buttonGroup.add(rButtonRR);
+		rButtonRR.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		rButtonRR.setBounds(214, 207, 135, 21);
+		contentPane.add(rButtonRR);
 		
-		JRadioButton RButtonLBS = new JRadioButton("Local Beam Search");
-		RButtonLBS.addActionListener(new ActionListener() {
+		JRadioButton rButtonLBS = new JRadioButton("Local Beam Search");
+		rButtonLBS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
 				
 			}
 		});
-		buttonGroup.add(RButtonLBS);
-		RButtonLBS.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		RButtonLBS.setBounds(214, 230, 157, 21);
-		contentPane.add(RButtonLBS);
+		buttonGroup.add(rButtonLBS);
+		rButtonLBS.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		rButtonLBS.setBounds(214, 230, 157, 21);
+		contentPane.add(rButtonLBS);
 		
-		JTextArea TxtAreaSolution = new JTextArea();
-		TxtAreaSolution.setText("The Solution will appear here:");
-		TxtAreaSolution.setBounds(10, 299, 601, 134);
-		contentPane.add(TxtAreaSolution);
+		JTextArea txtAreaSolution = new JTextArea();
+		txtAreaSolution.setText("The Solution will appear here:");
+		txtAreaSolution.setBounds(10, 299, 601, 134);
+		contentPane.add(txtAreaSolution);
 		
 		JButton btnWarehouse = new JButton("Choose File");
 		btnWarehouse.addActionListener(new ActionListener() {
-    
-    //open filechooser to get a warehouse file
 			public void actionPerformed(ActionEvent e) {
 				
-				int returnValue = openFileChooser.showOpenDialog(this);
+			//	int returnValue = openFileChooser.showOpenDialog(this);
 				
-				if returnValue == JFileChooser.APPROVE_OPTION {
-					//they have selected a file, which means I need to save that file
-					//and later on send it to the cotroller using submit?
-				} else {
+			//	if returnValue == JFileChooser.APPROVE_OPTION {
+					//fileWarehouse = openFileChooser.getSelectedFile();
 					
-				} 
+			//	} else {
+					
+			//	} 
 						
 			}
 		});
@@ -152,16 +150,13 @@ public class guitest extends JFrame {
 		JButton btnOrder = new JButton("Choose File");
 		btnOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-      
-      //open filechooser to get an order file
-				int returnValue = openFileChooser.showOpenDialog(this);
+				//int returnValue = openFileChooser.showOpenDialog(this);
 				
-				if returnValue == JFileChooser.APPROVE_OPTION {
-					//they have selected a file, which means I need to save that file
-					//and later on send it to the cotroller using submit?
-				} else {
+			//	if returnValue == JFileChooser.APPROVE_OPTION {
+					//fileOrder = openFileChooser.getSelectedFile();
+			//	} else {
 					
-				}
+			//	}
 			}
 		});
 		btnOrder.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -175,9 +170,9 @@ public class guitest extends JFrame {
 	}
 	
 	
-	//i recieve the solution string and display it on my textarea
+	
 	public void printsolution(String solution) {
-		TxtAreaSolution.setText(solution);
+		txtAreaSolution.setText(solution);
 	}
 	
 	
