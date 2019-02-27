@@ -109,7 +109,7 @@ public class Algorithms{
           stateValue = newValue;
         }
       }
-     
+
     }
     return finalState;
   }
@@ -258,9 +258,10 @@ public class Algorithms{
 
   public int[] firstChoiceHillClimbing(){
     this.finalState = stateMethods.generateRandomState();
+    List<int[]> neighbours = new ArrayList<int[]>();
 
     for(int iteration = 0; iteration < 100; iteration ++){
-      List<int[]> neighbours = new ArrayList<int[]>();
+
       neighbours= stateMethods.createNeighbours(finalState, false);
 
       int stateValue = stateMethods.evaluate(finalState);
@@ -271,10 +272,7 @@ public class Algorithms{
 
       int[] newState = neighbours.remove(0);
       boolean betterNeighbourFound = false;
-      do{
-        if(newState == null){
-          return this.finalState;
-        }
+      while(!betterNeighbourFound||neighbours.isEmpty()){
 
         int newValue = stateMethods.evaluate(newState);
 
@@ -283,10 +281,12 @@ public class Algorithms{
           betterNeighbourFound = true;
         }
         newState = neighbours.remove(0);
-      }while(!betterNeighbourFound||newState != null);
+      }
+      System.out.println("bla");
+      //return this.finalState;
     }
 
-    return finalState;
+    return this.finalState;
   }
 
   /**
