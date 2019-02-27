@@ -28,14 +28,17 @@ public class Algorithms{
   * @return we return the best state our search algorithm has found
   */
   public int[] hillClimbing(){
+    System.out.println("@HillClimbing: I am entering hillClimbing!!");
     this.finalState = stateMethods.generateRandomState();
 
     int stateValue = stateMethods.evaluate(finalState);
+    System.out.println("Initial State Value: " + stateValue);
 
-    if(stateValue == stateMethods.optimum()){
-      return this.finalState;
-    }
-
+//    if(stateValue == stateMethods.optimum()){
+//      System.out.println("Optimal State!");
+//      return this.finalState;
+//    }
+    System.out.println("Starting 10000 iterations");
     for(int iteration = 0; iteration < 100; iteration ++){
        List<int[]> neighbours = stateMethods.createNeighbours(finalState, false);
 
@@ -52,7 +55,8 @@ public class Algorithms{
 
        this.finalState = bestNeighbour;
     }
-     return this.finalState;
+    System.out.println("End of For loop");
+    return this.finalState;
   }
 
 
@@ -258,10 +262,9 @@ public class Algorithms{
 
   public int[] firstChoiceHillClimbing(){
     this.finalState = stateMethods.generateRandomState();
-    List<int[]> neighbours = new ArrayList<int[]>();
 
     for(int iteration = 0; iteration < 100; iteration ++){
-
+      List<int[]> neighbours = new ArrayList<int[]>();
       neighbours= stateMethods.createNeighbours(finalState, false);
 
       int stateValue = stateMethods.evaluate(finalState);
@@ -272,7 +275,10 @@ public class Algorithms{
 
       int[] newState = neighbours.remove(0);
       boolean betterNeighbourFound = false;
-      while(!betterNeighbourFound||neighbours.isEmpty()){
+      do{
+        if(newState == null){
+          return this.finalState;
+        }
 
         int newValue = stateMethods.evaluate(newState);
 
@@ -281,12 +287,10 @@ public class Algorithms{
           betterNeighbourFound = true;
         }
         newState = neighbours.remove(0);
-      }
-      System.out.println("bla");
-      //return this.finalState;
+      }while(!betterNeighbourFound||newState != null);
     }
 
-    return this.finalState;
+    return finalState;
   }
 
   /**
