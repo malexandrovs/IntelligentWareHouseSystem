@@ -30,12 +30,14 @@ public class WareHouseModel {
 	public boolean setWarehouse(File warehouseTxt){
 
 		boolean successful = true;
-	
+		int psu = 0;
 
 		try (
 			FileReader fr = new FileReader(warehouseTxt);
 			BufferedReader br = new BufferedReader(fr);
+			
 		){
+			System.out.println("done");
 			String[] items = br.readLine().split(" ");
 			for (String item : items) {
 				wareHouse.put(item, new ArrayList<Integer>());
@@ -45,7 +47,7 @@ public class WareHouseModel {
 			br.readLine();
 
 			String line = br.readLine();
-			int psu = 0;
+			// int psu = 0;
 
 			while (line !=  null) {
 				for (String item : items) {
@@ -57,6 +59,7 @@ public class WareHouseModel {
 				psu++;	
 			}
 		} catch (IOException e) {
+			System.out.println(psu);
 			successful = false;
 		}
 		stateHandler = StateHandler.getInstance(wareHouse);
