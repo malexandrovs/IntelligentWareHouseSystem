@@ -16,7 +16,7 @@ public class WareHouseModel {
 	// private String order;
 	private Algorithms algs;
 	private HashMap<String, ArrayList<Integer>> wareHouse;
-	private HashMap<Integer, String[]> psus;
+	private HashMap<Integer, String> psus;
 	private int [] optimum;
 	private StateHandler stateHandler;
 
@@ -25,7 +25,7 @@ public class WareHouseModel {
 	 */
 	public WareHouseModel(){
 		wareHouse = new HashMap<String, ArrayList<Integer>>();
-		psus = new HashMap<Integer,String[]>();
+		psus = new HashMap<Integer,String>();
 	}
 
 	/**
@@ -45,7 +45,6 @@ public class WareHouseModel {
 		){
 			System.out.println("done");
 			String[] items = br.readLine().split(" ");
-			psus.put(psu, items);
 			for (String item : items) {
 				wareHouse.put(item, new ArrayList<Integer>());
 			}
@@ -57,6 +56,8 @@ public class WareHouseModel {
 			// int psu = 0;
 
 			while (line !=  null) {
+				psus.put(psu, line);
+
 				for (String item : items) {
 					if (line.contains(item)) {
 						wareHouse.get(item).add(psu);
@@ -122,7 +123,15 @@ public class WareHouseModel {
 	 *@return String with elements
   	 */
 	public String getResult() {
-		stateHandler.showUsedPSUs(optimum);
+		int[] usedPSUs = stateHandler.showUsedPSUs(optimum);
+
+		String result = "This solution uses " + usedPSUs.length + " PSUs. \nThe PSUs used are: \n";
+
+		for (int psu : usedPSUs) {
+			result = result + psu + " - with the following items: " + psus.get(psu) + "\n";
+		}
+
+
 
 		return result;
 	}
