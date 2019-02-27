@@ -74,18 +74,19 @@ public class StateHandler {
     return result;
   }
 
-	/** Creates the neighbours of a given State.
+  /** Creates the neighbours of a given State.
    * Neighbours which are searched: For each element of the
    * order there is a new PSU found, containing that item.
    * A neighbours differs only in one PSU from the current State.
-	 *@return ArrayList<int[]> with all neighbours, does not skip indices and starts with 0.
+   *@return ArrayList<int[]> with all neighbours, does not skip indices and starts with 0.
    *@param currentState of type int[]: from where on the next neighbours
    * should be searched.
    *@param stopAtEndOfWarehouse of type boolean. If true, it will return -1 for items,
    * if it has reached the End of the warehouse. Ff false, the next neighbor will be choosen from
    * the beginning of the beginning of the warehouse. In this case there should be an iteration limit.
-	 */
-	public ArrayList<int[]> createNeighbours(int[] currentState, boolean stopAtEndOfWarehouse){
+   */
+    public ArrayList<int[]> createNeighbours(int[] currentState, boolean stopAtEndOfWarehouse){
+    System.out.println("Creating Neighbours");
     ArrayList<int[]> neighbours = new ArrayList<int[]>();
 
     for(int i = 0; i < order.length; i++){
@@ -93,18 +94,28 @@ public class StateHandler {
       String currentItem = order[i];
       ArrayList<Integer> allPSUsContainingItem = warehouse.get(currentItem);
       int currentPSU = currentState[i];
+      //otherwise we do not need to search for any neighbours
       if((currentPSU != -1) & (allPSUsContainingItem != null)){
           int indexOfCurrentPSU = allPSUsContainingItem.indexOf(Integer.valueOf(currentPSU));
-          if(indexOfCurrentPSU < allPSUsContainingItem.size()-1){
-            currentNeighbour[i] = allPSUsContainingItem.get(indexOfCurrentPSU+1);
-          } else if ((indexOfCurrentPSU >= allPSUsContainingItem.size()-1) && stopAtEndOfWarehouse){
-            currentNeighbour[i] = -1;
-          } else if ((indexOfCurrentPSU >= allPSUsContainingItem.size()-1) && !stopAtEndOfWarehouse){
-            currentNeighbour[i] = allPSUsContainingItem.get(0);
+
+          for(int j = 0; j < allPSUsContainingItem.size(); j++){
+            currentNeighbour[i] = allPSUsContainingItem.get(j);
+            neighbours.add(currentNeighbour);
           }
-          neighbours.add(currentNeighbour);
+
+//          if ((indexOfCurrentPSU >= allPSUsContainingItem.size()-1) && stopAtEndOfWarehouse){
+//            currentNeighbour[i] = -1;
+//          } else if ((indexOfCurrentPSU >= allPSUsContainingItem.size()-1) && !stopAtEndOfWarehouse){
+//            for(int j = 0; j < indexOfCurrentPSU; j++){
+//              currentNeighbour[i] = allPSUsContainingItem.get(j);
+//              neighbours.add(currentNeighbour);
+//            }
+//          }
+      } else {
+        System.out.println("@StateHandler: Item does not exist");
       }
     }
+    System.out.println(neighbours.size());
     return neighbours;
   }
 
