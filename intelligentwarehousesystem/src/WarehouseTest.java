@@ -25,7 +25,7 @@ public class WarehouseTest{
 
         warehouse.initOrder(order);
         
-        warehouse.startSearch(4,4);
+        warehouse.startSearch(2,4);
 
         // int[] result = warehouse.getResult();
     
