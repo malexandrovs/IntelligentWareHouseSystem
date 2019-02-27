@@ -115,14 +115,11 @@ public class Algorithms{
   	List<int[]> allNeighbours = new ArrayList<int[]>();
 
   	int[] currentElement;
+
   	for(int iteration = 0; iteration < 100; iteration ++){
 
 
   		for(int position = 0; position < current.size(); position ++){
-<<<<<<< HEAD
-
-=======
->>>>>>> 1b9705a54cc6028220467244b71f2588f5fb361e
   			currentElement = current.get(position);
   			currentNeighbours = stateMethods.createNeighbours(currentElement,false);
   			allNeighbours.addAll(currentNeighbours);
@@ -243,10 +240,6 @@ public class Algorithms{
 
       int stateValue = stateMethods.evaluate(finalState);
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 1b9705a54cc6028220467244b71f2588f5fb361e
 
       int[] newState = neighbours.get(0);
       neighbours.remove(0);
@@ -262,11 +255,7 @@ public class Algorithms{
         newState = neighbours.get(0);
         neighbours.remove(0);
       }
-<<<<<<< HEAD
-      //return this.finalState;
-=======
       return this.finalState;
->>>>>>> 1b9705a54cc6028220467244b71f2588f5fb361e
     }
 
     return this.finalState;
@@ -279,17 +268,8 @@ public class Algorithms{
   */
 
   public int[] theBestNeighbour(List<int[]> neighbours){
-<<<<<<< HEAD
-
-    for (int[] state : neighbours) {
-      for (int i : state) {
-        System.out.print(i);
-      }
-      System.out.println();
-=======
     if(neighbours.isEmpty()){
       int[] empty = new int[0];
->>>>>>> 1b9705a54cc6028220467244b71f2588f5fb361e
     }
    int[] currentBest = neighbours.get(0);
    int currentBestValue = stateMethods.evaluate(currentBest);
