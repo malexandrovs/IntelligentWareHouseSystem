@@ -13,8 +13,9 @@ import java.util.stream.Stream;
 public class StateHandler {
 
   private String[] order = null;
-  private Map<String, ArrayList<Integer>> warehouse = new HashMap<String, ArrayList<Integer>>();
+  private Map<String, ArrayList<Integer>> itemWarehouse = new HashMap<String, ArrayList<Integer>>();
   //key: PSU number; value: how many elements of the order are contained in the PSU
+  private Map<Integer, String[]> psuWarehouse = new HashMap<Integer, String[]>();
   private Map<Integer, Integer> evaluationMap = new TreeMap<Integer, Integer>();
 
   /** Constructor for creating a StateHandler.
@@ -24,21 +25,33 @@ public class StateHandler {
    * the items. Do not skip indices of the ArrayList. Start with index 0.
    * Do not use empty warehouse or a null object.
    */
-  public StateHandler(HashMap<String, ArrayList<Integer>> warehouse){
-    if(warehouse == null || warehouse.size() == 0){
-      System.err.println("@StateHandler: Warehouse is null or empty.");
+  public StateHandler(HashMap<String, ArrayList<Integer>> itemWarehouse, HashMap<Integer, String> psuWarehouseString){
+    if(itemWarehouse == null || itemWarehouse.size() == 0){
+      System.err.println("@StateHandler: Item Warehouse is null or empty.");
     }
-    this.warehouse = warehouse;
+    this.itemWarehouse = itemWarehouse;
+    if(psuWarehouseString == null || psuWarehouseString.size() == 0){
+      System.err.println("@StateHandler: PSU Warehouse is null or empty.");
+    }
+    for(int psu = 0; psu < psuWarehouseString.size(); psu++){
+      psuWarehouse.put(psu, psuWarehouseString.get(psu).split(" "));
+    }
+
   }
 
   /** Updates the warehouse, replaces the current warehouse with a new one.
    *@param newWarehouse of type HashMap<String, ArrayList<Integer>>. The new warehouse.
    */
-  public void updateWarehouse(HashMap<String, ArrayList<Integer>> newWarehouse){
-    if(newWarehouse == null || newWarehouse.size() < 1){
-      System.err.println("@StateHandler: New Warehouse was not set since it is empty or null.");
-    } else{
-      this.warehouse = newWarehouse;
+  public void updateWarehouse(HashMap<String, ArrayList<Integer>> itemWarehouse, HashMap<Integer, String> psuWarehouseString){
+    if(itemWarehouse == null || itemWarehouse.size() == 0){
+      System.err.println("@StateHandler: itemWarehouse is null or empty.");
+    }
+    this.itemWarehouse = itemWarehouse;
+    if(psuWarehouseString == null || psuWarehouseString.size() == 0){
+      System.err.println("@StateHandler: psuWarehouse are null or empty.");
+    }
+    for(int psu = 0; psu < psuWarehouseString.size(); psu++){
+      psuWarehouse.put(psu, psuWarehouseString.get(psu).split(" "));
     }
   }
   /**
@@ -111,7 +124,7 @@ public class StateHandler {
     for(int i = 0; i < order.length; i++){
       int[] currentNeighbour = currentState.clone();
       String currentItem = order[i];
-      ArrayList<Integer> allPSUsContainingItem = warehouse.get(currentItem);
+      ArrayList<Integer> allPSUsContainingItem = itemWarehouse.get(currentItem);
       int currentPSU = currentState[i];
       //otherwise we do not need to search for any neighbours
       if((currentPSU != -1) & (allPSUsContainingItem != null)){
@@ -154,7 +167,7 @@ public class StateHandler {
     //catch for each element of the order a random number of the corresponding ArrayList<Integer>
     for(int i = 0; i < order.length; i++){
       String currentItem = order[i];
-      ArrayList<Integer> allPSUsContainingItem = warehouse.get(currentItem);
+      ArrayList<Integer> allPSUsContainingItem = itemWarehouse.get(currentItem);
       if(allPSUsContainingItem == null || allPSUsContainingItem.size() == 0){
         randomState[i] = -1;
       } else {
@@ -177,7 +190,7 @@ public class StateHandler {
     //the first PSU contained in the ArrayList "allPSUsContainingItem"
     for(int i = 0; i < order.length; i++){
       String currentItem = order[i];
-      ArrayList<Integer> allPSUsContainingItem = warehouse.get(currentItem);
+      ArrayList<Integer> allPSUsContainingItem = itemWarehouse.get(currentItem);
       if(allPSUsContainingItem == null || allPSUsContainingItem.size() == 0){
         initialState[i] = -1;
       } else {
@@ -203,7 +216,7 @@ public class StateHandler {
 
       for(int item = 0; item < order.length; item++){
         //we get the psus of the order
-        ArrayList<Integer> allPSUsContainingItem = warehouse.get(order[item]);
+        ArrayList<Integer> allPSUsContainingItem = itemWarehouse.get(order[item]);
         if(allPSUsContainingItem == null){
           System.out.println("Nuuuuuull");
         }
@@ -258,31 +271,28 @@ public class StateHandler {
    * the ith ordered item.
    */
   public int[] showUsedPSUs(int[] state){
-    System.out.println("State: " + Arrays.toString(state));
-    int[] duplicates = new int[order.length];
-
-    //go through order and find for each item the psu with the highest value
-    for(int item = 0; item < order.length; item++){
-      boolean bestPSUFound = false;
-      //evaluationMap is a treeMap -> ascending order -> highest value at the end
-      for(int i = evaluationMap.size()-1; i >= 0 && !bestPSUFound; i--){
-        //getting the key of current PSU (beginning at the end of the treemap)
-        Integer currentPSU = (Integer) evaluationMap.keySet().toArray()[i];
-        if((warehouse.get(order[item])).contains(currentPSU)){
-          bestPSUFound = true;
-          duplicates[item] = currentPSU;
+    List<Integer> usedPSUs = new ArrayList<Integer>();
+    List<String> orderList = Arrays.asList(this.order);
+    //we go through all used psus of the state
+    //and compare its contained items with the order
+    //if it has a item of the order, we add it and remove the item from the order
+    //if the psus is already added, it will not added again.
+    for(int i = 0; i < state.length; i++){
+      int currentPSU = state[i];
+      String[] itemsContainedByPSU = psuWarehouse.get(currentPSU);
+      for(int j = 0; j < itemsContainedByPSU.length; j++){
+        String item = itemsContainedByPSU[j];
+        if(orderList.contains(item) & !(usedPSUs.contains(currentPSU))){
+          usedPSUs.add(Integer.valueOf(currentPSU));
+          orderList.remove(item);
         }
       }
     }
-    System.out.println("Used PSUS: " + Arrays.toString(duplicates));
-    //removing duplicates
-    Set<Integer> withoutDuplicates = new HashSet<Integer>();
-    for(int i = 0; i < duplicates.length; i++){
-      withoutDuplicates.add(duplicates[i]);
+    int[] result = new int[usedPSUs.size()];
+    for(int k = 0; k < result.length; k++){
+      result[k] = usedPSUs.get(k);
     }
-    //convert to int[]
-    Integer[] result = withoutDuplicates.toArray(new Integer[withoutDuplicates.size()]);
-    return Arrays.stream(result).mapToInt(Integer::intValue).toArray();
+    return result;
   }
 
   public int numOfUsedPSUs(int[] state){
