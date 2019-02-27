@@ -3,7 +3,7 @@ import java.util.*;
 import model.StateHandler;
 
 /**
-* in this class, the different search algorithms are used, which return the best state or list of states they found
+* In this class, the different search algorithms are used, which return the best state they found
 * @author Daniel Pietschke
 */
 
@@ -21,10 +21,6 @@ public class Algorithms{
 
   /**
   * This method is the implemented classical hill climb algorithm
-  * @param finalState; the state in which every item is listed with the number of the first PSU it appears in
-  * @param stateValue; the Value, which shows hoe good our finalState is
-  * @param neighbours; an ArrayList, which contains all states, whih are determined as neighbours of finalState
-  * @param bestNeighbour; the state, which is by value the best state in our complete neighbourhood
   * @return we return the best state our search algorithm has found
   */
   public int[] hillClimbing(){
@@ -32,19 +28,11 @@ public class Algorithms{
 
     int stateValue = stateMethods.evaluate(finalState);
 
-    if(stateValue == stateMethods.optimum()){
-      return this.finalState;
-    }
-
     for(int iteration = 0; iteration < 100; iteration ++){
        List<int[]> neighbours = stateMethods.createNeighbours(finalState, false);
 
        int[] bestNeighbour = theBestNeighbour(neighbours);
        int newValue = stateMethods.evaluate(bestNeighbour);
-
-       if(newValue == stateMethods.optimum()){
-         return bestNeighbour;
-       }
 
        if(newValue <= stateValue){
          return finalState;
@@ -59,10 +47,6 @@ public class Algorithms{
 
   /**
   * this method is the implemented simulated Annealing algorithm
-  * @param all parameters which are also used in hillClimbing
-  * @param temperature; this parameter is a measure for the probability of the algorithm to perform downhill steps during the search
-  * @param deltaValue; the difference between the current value and the neighbour's value
-  * @param probability; a random double, which is used to determine the probability of performing a downhill step
   * @return we return the state, whcih the algorithm found as the best option for our order
   */
 
@@ -76,10 +60,6 @@ public class Algorithms{
     int stateValue = stateMethods.evaluate(finalState);
 
 
-    if(stateValue == stateMethods.optimum()){
-       return this.finalState;
-    }
-
     //we perform simulated annealing until our temperature reaches 0
     for(int i = temperature; i > 0; i = temperature - 5){
       temperature = temperature - 5;
@@ -92,9 +72,6 @@ public class Algorithms{
 
         int newValue = stateMethods.evaluate(newState);
 
-        if(newValue == stateMethods.optimum()){
-          return newState;
-        }
 
         int deltaValue = newValue - stateValue;
         Random downstep = new Random();
@@ -117,10 +94,7 @@ public class Algorithms{
 
   /**
   * This method is the implemented local Beam Search Algorithm
-  * @param numOfBeams; this is the lenght of the list of states we want to get in the end
-  * @param current; a list of states, which contains the overall best combination of states at the end
-  * @param allNeighbours; a list of the complete neighbourhood of every state in our current list
-  * @param bestNeighbours; contains numOfBeams many best neighbours from the allNeighbours list
+  * @param numOfBeams this is the numer of beams (states) the algorithm operates on
   * @return we return the best state of our list of states, which were determined the best as a whole by the algorithm
   */
 
@@ -145,7 +119,10 @@ public class Algorithms{
 
 
   		for(int position = 0; position < current.size(); position ++){
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1b9705a54cc6028220467244b71f2588f5fb361e
   			currentElement = current.get(position);
   			currentNeighbours = stateMethods.createNeighbours(currentElement,false);
   			allNeighbours.addAll(currentNeighbours);
@@ -224,8 +201,7 @@ public class Algorithms{
 
   /**
   * This method is the implemented random restart hill climbing algorithm
-  * @param newState; this is the state which is returned by the hillClimbing algorithm
-  * @param iterations; this value is given by the user, it states the number of independent hill climbing searches we use
+  * @param iterations this is the number of independent hillClimbing searches
   * @return we return the state which is determined the best by the algorithm
   */
 
@@ -254,8 +230,6 @@ public class Algorithms{
 
   /**
   * this method is the implemented first choice hill climbing algorithm
-  * @param all parameters which are also used in hillClimbing
-  * @param betterNeighbourFound; a boolean which is true if we find a state that is better than our current state, which then ends the search for a better neighbour
   * @return we return the state which was determined the best by the algorithm
   */
 
@@ -269,11 +243,15 @@ public class Algorithms{
 
       int stateValue = stateMethods.evaluate(finalState);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 1b9705a54cc6028220467244b71f2588f5fb361e
 
-      int[] newState = neighbours.remove(0);
+      int[] newState = neighbours.get(0);
+      neighbours.remove(0);
       boolean betterNeighbourFound = false;
-      while(!betterNeighbourFound||neighbours.isEmpty()){
+      while(!betterNeighbourFound||!neighbours.isEmpty()){
 
         int newValue = stateMethods.evaluate(newState);
 
@@ -281,9 +259,14 @@ public class Algorithms{
           this.finalState = newState;
           betterNeighbourFound = true;
         }
-        newState = neighbours.remove(0);
+        newState = neighbours.get(0);
+        neighbours.remove(0);
       }
+<<<<<<< HEAD
       //return this.finalState;
+=======
+      return this.finalState;
+>>>>>>> 1b9705a54cc6028220467244b71f2588f5fb361e
     }
 
     return this.finalState;
@@ -291,20 +274,22 @@ public class Algorithms{
 
   /**
   * this method is used to determine the best state in a list of states, a.k.a. the best neighbour in a neighbourhood
-  * @param currentBest; the currently best state we have
-  * @param currentBestValue; currently the best value, which is determined by currentBest
-  * @param newValue; the value of the state we compare to currentBest
-  * @param newState; the state we compare to currentBest
+  * @param neighbours this is the list of neighbours of a state from which the method returns the best single state
   * @return we return the best state from the list of states, a.k.a. the best neighbour from our neighbourhood
   */
 
   public int[] theBestNeighbour(List<int[]> neighbours){
+<<<<<<< HEAD
 
     for (int[] state : neighbours) {
       for (int i : state) {
         System.out.print(i);
       }
       System.out.println();
+=======
+    if(neighbours.isEmpty()){
+      int[] empty = new int[0];
+>>>>>>> 1b9705a54cc6028220467244b71f2588f5fb361e
     }
    int[] currentBest = neighbours.get(0);
    int currentBestValue = stateMethods.evaluate(currentBest);
