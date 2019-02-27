@@ -4,6 +4,7 @@ import model.StateHandler;
 
 /**
 * in this class, the different search algorithms are used, which return the best state or list of states they found
+* @author Daniel Pietschke
 */
 
 public class Algorithms{
@@ -20,7 +21,10 @@ public class Algorithms{
 
   /**
   * This method is the implemented classical hill climb algorithm
-  * @param initialState; the state in which every item is listed with the number of the first PSU it appears in
+  * @param finalState; the state in which every item is listed with the number of the first PSU it appears in
+  * @param stateValue; the Value, which shows hoe good our finalState is
+  * @param neighbours; an ArrayList, which contains all states, whih are determined as neighbours of finalState
+  * @param bestNeighbour; the state, which is by value the best state in our complete neighbourhood
   * @return we return the best state our search algorithm has found
   */
   public int[] hillClimbing(){
@@ -55,7 +59,10 @@ public class Algorithms{
 
   /**
   * this method is the implemented simulated Annealing algorithm
+  * @param all parameters which are also used in hillClimbing
   * @param temperature; this parameter is a measure for the probability of the algorithm to perform downhill steps during the search
+  * @param deltaValue; the difference between the current value and the neighbour's value
+  * @param probability; a random double, which is used to determine the probability of performing a downhill step
   * @return we return the state, whcih the algorithm found as the best option for our order
   */
 
@@ -73,6 +80,7 @@ public class Algorithms{
        return this.finalState;
     }
 
+    //we perform simulated annealing until our temperature reaches 0
     for(int i = temperature; i > 0; i = temperature - 5){
 
       for(int j = 0; j < neighbours.size(); j++){
@@ -101,6 +109,7 @@ public class Algorithms{
           stateValue = newValue;
         }
       }
+      temperature = temperature - 5;
     }
     return finalState;
   }
@@ -109,7 +118,10 @@ public class Algorithms{
   /**
   * This method is the implemented local Beam Search Algorithm
   * @param numOfBeams; this is the lenght of the list of states we want to get in the end
-  * @return we return the list of states which was determined the best as a whole by the algorithm
+  * @param current; a list of states, which contains the overall best combination of states at the end
+  * @param allNeighbours; a list of the complete neighbourhood of every state in our current list
+  * @param bestNeighbours; contains numOfBeams many best neighbours from the allNeighbours list
+  * @return we return the best state of our list of states, which were determined the best as a whole by the algorithm
   */
 
   public int[] localBeam(int numOfBeams){
@@ -140,6 +152,7 @@ public class Algorithms{
   		}
 
 
+      //determine the numOfBeams best neighbours out of our complete neighbourhood
   		int[] bestElement;
   		int bestValue;
   		List<int[]> bestNeighbours = new ArrayList<int[]>();
@@ -172,6 +185,7 @@ public class Algorithms{
 
       allNeighbours.clear();
 
+      //compare the overall value of our current list and the bestNeighbours list
       int allCurrentValues = 0;
       int allBestNeighbourValues = 0;
       int[] element;
@@ -207,7 +221,8 @@ public class Algorithms{
 
   /**
   * This method is the implemented random restart hill climbing algorithm
-  * @param iterations; this value is given by the user, it sts the number of independent hill climbing searches we use
+  * @param newState; this is the state which is returned by the hillClimbing algorithm
+  * @param iterations; this value is given by the user, it states the number of independent hill climbing searches we use
   * @return we return the state which is determined the best by the algorithm
   */
 
@@ -230,15 +245,16 @@ public class Algorithms{
     }
 
     return finalState;
- }
+  }
 
 
 
- /**
- * this method is the implemented first choice hill climbing algorithm
- * @param everyone; this method uses the standard hill climbing parameters
- * @return we return the state which was determined the best by the algorithm
- */
+  /**
+  * this method is the implemented first choice hill climbing algorithm
+  * @param all parameters which are also used in hillClimbing
+  * @param betterNeighbourFound; a boolean which is true if we find a state that is better than our current state, which then ends the search for a better neighbour
+  * @return we return the state which was determined the best by the algorithm
+  */
 
   public int[] firstChoiceHillClimbing(){
     this.finalState = stateMethods.generateRandomState();
@@ -254,7 +270,7 @@ public class Algorithms{
       }
 
       int[] newState = neighbours.remove(0);
-      boolean bestNeighbourFound = false;
+      boolean betterNeighbourFound = false;
       do{
         if(newState == null){
           return this.finalState;
@@ -264,17 +280,25 @@ public class Algorithms{
 
         if(newValue >= stateValue){
           this.finalState = newState;
-          bestNeighbourFound = true;
+          betterNeighbourFound = true;
         }
         newState = neighbours.remove(0);
-      }while(!bestNeighbourFound||newState != null);
+      }while(!betterNeighbourFound||newState != null);
     }
 
     return finalState;
- }
+  }
 
+  /**
+  * this method is used to determine the best state in a list of states, a.k.a. the best neighbour in a neighbourhood
+  * @param currentBest; the currently best state we have
+  * @param currentBestValue; currently the best value, which is determined by currentBest
+  * @param newValue; the value of the state we compare to currentBest
+  * @param newState; the state we compare to currentBest
+  * @return we return the best state from the list of states, a.k.a. the best neighbour from our neighbourhood
+  */
 
- public int[] theBestNeighbour(List<int[]> neighbours){
+  public int[] theBestNeighbour(List<int[]> neighbours){
    int[] currentBest = neighbours.get(0);
    int currentBestValue = stateMethods.evaluate(currentBest);
    int newValue = 0;
@@ -289,5 +313,5 @@ public class Algorithms{
      }
    }
    return currentBest;
- }
+  }
 }
