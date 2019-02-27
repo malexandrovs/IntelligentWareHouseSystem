@@ -33,8 +33,6 @@ public class WarehouseTest{
         for (int psu : result) {
             System.out.println(psu);
         }
-
-
         } catch(IOException e){
             e.printStackTrace();
         } catch(InvalidOrderException e){
