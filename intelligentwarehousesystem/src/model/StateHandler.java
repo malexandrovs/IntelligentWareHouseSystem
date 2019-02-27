@@ -22,17 +22,12 @@ public class StateHandler {
    * (PSUs containing the item). Do not use empty Strings. Strings must be unique identifiers for
    * the items. Do not skip indices of the ArrayList. Start with index 0.
    * Do not use empty warehouse or a null object.
-   * @param order of type String[]. Do not use empty order or a null object.
    */
-  public StateHandler(HashMap<String, ArrayList<Integer>> warehouse, String[] order){
+  public StateHandler(HashMap<String, ArrayList<Integer>> warehouse){
     if(warehouse == null || warehouse.size() == 0){
       System.err.println("@StateHandler: Warehouse is null or empty.");
     }
-    if(order == null || order.length < 1){
-      System.err.println("@StateHandler: Order is null or empty.");
-    }
     this.warehouse = warehouse;
-    this.order = order;
   }
 
   /** Updates the warehouse, replaces the current warehouse with a new one.
