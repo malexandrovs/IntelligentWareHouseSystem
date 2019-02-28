@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 import java.io.File;
 
 import model.WareHouseModel;
-import view.WareHouseView;
+import view.Gui;
 /**
  * The WarehouseController connects the the GUI and the functionality of the program
  * according to the Model-View-Controller pattern.
@@ -15,16 +15,16 @@ import view.WareHouseView;
  */
 public class WarehouseController {
 
-	private WareHouseView theView;
+	private Gui theView;
 	private WareHouseModel theModel;
 	
-	public WarehouseController(WareHouseView theView, WareHouseModel theModel) {
+	public WarehouseController(Gui theView, WareHouseModel theModel) {
 		
 		this.theView = theView;
 		this.theModel = theModel;
 		
 		this.theView.addWareHouseListener(new WarehouseListener());
-		this.theView.addOrderReceiver(new OrderReceiver());
+		this.theView.addOrderListener(new OrderListener());
 	}
 	
 	/**
@@ -55,7 +55,7 @@ public class WarehouseController {
 		
 	}
 	
-	class OrderReceiver implements ActionListener{
+	class OrderListener implements ActionListener{
 //OrderReceiver is activated when user presses Button in the GUI to submit an Order.
 //Order Receiver is given to the Button as an ActionListener
 //		The GUI needs the following Methods:

@@ -1,6 +1,6 @@
 import controller.WarehouseController;
 import model.WareHouseModel;
-import view.WareHouseView;
+import view.Gui;
 /**
  * The Intelligent Warehouse System takes in information about a warehouse containing PSUs.
  * Each PSU has a set of items stored on it.
@@ -20,7 +20,7 @@ import view.WareHouseView;
 public class IntelligentWareHouseSystem {
 
 	public static void main(String[] args) {
-		WareHouseView theView = new WareHouseView();
+		Gui theView = new Gui();
 		WareHouseModel theModel = new WareHouseModel();
 		WarehouseController theController = new WarehouseController(theView, theModel);
 		
