@@ -1,5 +1,9 @@
 package view;
 
+/**
+ * In this class, the GUI is created and its functions initialized
+ */
+
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
@@ -25,6 +29,7 @@ import javax.swing.JScrollBar;
 
 public class Gui extends JFrame {
 
+	
 	private JPanel contentPane;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private final JFileChooser openFileChooser;
@@ -32,31 +37,24 @@ public class Gui extends JFrame {
 	private File fileWarehouse;
 	private File fileOrder;
 	private int algo;
+	private JButton btnWarehouse;
+	private JButton btnOrder;
 	private JButton btnSubmitWarehouse;
 	private JButton btnSubmitOrder;
 	private JTextArea txtAreaSolution;
 	private JLabel lblabelParam;
 	private JOptionPane errPane;
 	private JScrollPane jsp;
+	private JRadioButton rButtonHC;
+	private JRadioButton rButtonFCHC;
+	private JRadioButton rButtonSA;
+	private JRadioButton rButtonRR;
+	private JRadioButton rButtonLBS;
+
 
 	/**
-	 * Launch the application.
-	 */
-//	public static void main(String[] args) {
-//		EventQueue.invokeLater(new Runnable() {
-//			public void run() {
-//				try {
-//					Gui frame = new Gui();
-//					frame.setVisible(true);
-//				} catch (Exception e) {
-//					e.printStackTrace();
-//				}
-//			}
-//		});
-//	}
-
-	/**
-	 * Create the frame.
+	 * Creates the Frame
+	 * 
 	 */
 	public Gui() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -89,7 +87,7 @@ public class Gui extends JFrame {
 		textLabelAlgo.setBounds(10, 139, 176, 19);
 		contentPane.add(textLabelAlgo);
 		
-		JRadioButton rButtonHC = new JRadioButton("Hill-Climbing");
+		rButtonHC = new JRadioButton("Hill-Climbing");
 		rButtonHC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				algo = 0;
@@ -103,7 +101,7 @@ public class Gui extends JFrame {
 		rButtonHC.setBounds(214, 138, 105, 21);
 		contentPane.add(rButtonHC);
 		
-		JRadioButton rButtonFCHC = new JRadioButton("First Choice Hill Climbing");
+		rButtonFCHC = new JRadioButton("First Choice Hill Climbing");
 		rButtonFCHC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				algo = 4;
@@ -117,7 +115,7 @@ public class Gui extends JFrame {
 		rButtonFCHC.setBounds(214, 161, 194, 21);
 		contentPane.add(rButtonFCHC);
 		
-		JRadioButton rButtonSA = new JRadioButton("Simulated Annealing");
+		rButtonSA = new JRadioButton("Simulated Annealing");
 		rButtonSA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				algo = 1;
@@ -130,7 +128,7 @@ public class Gui extends JFrame {
 		rButtonSA.setBounds(214, 184, 157, 21);
 		contentPane.add(rButtonSA);
 		
-		JRadioButton rButtonRR = new JRadioButton("Random Restart");
+		rButtonRR = new JRadioButton("Random Restart");
 		rButtonRR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtNumberOfStates.setVisible(true);
@@ -143,7 +141,7 @@ public class Gui extends JFrame {
 		rButtonRR.setBounds(214, 207, 135, 21);
 		contentPane.add(rButtonRR);
 		
-		JRadioButton rButtonLBS = new JRadioButton("Local Beam Search");
+		rButtonLBS = new JRadioButton("Local Beam Search");
 		rButtonLBS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtNumberOfStates.setVisible(true);
@@ -167,7 +165,7 @@ public class Gui extends JFrame {
 		jsp.setBounds(10, 299, 618, 124);
 	    contentPane.add(jsp);
 		
-		JButton btnWarehouse = new JButton("Choose File");
+		btnWarehouse = new JButton("Choose File");
 		btnWarehouse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
@@ -182,7 +180,7 @@ public class Gui extends JFrame {
 		btnWarehouse.setBounds(234, 53, 115, 21);
 		contentPane.add(btnWarehouse);
 		
-		JButton btnOrder = new JButton("Choose File");
+		btnOrder = new JButton("Choose File");
 		btnOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int returnValue = openFileChooser.showOpenDialog(openFileChooser);
@@ -221,24 +219,45 @@ public class Gui extends JFrame {
 		
 		
 	}
+	//The following methods are the foundation of communication between GUI and Controller
 	
-	
+	/**
+	 * Puts the solution into the TextArea as a String
+	 * @param solution is the solution given to the GUI by the Controller, containing the number of PSUs used including their identifiers and the items stored in them
+	 */
 	public void setSolution(String solution) {
 		txtAreaSolution.setText(solution);
 	}
 	
+	/**
+	 * 
+	 * @return returns the ID-Number of the algorithm chosen by the user
+	 */
 	public int getAlgo() {
 		return algo;
 	}
 	
+	/**
+	 * 
+	 * @return returns the File chosen by the user to be the designated warehouse
+	 */
 	public File getWarehouse() {
 		return fileWarehouse;
 	}
 	
+	/**
+	 * 
+	 * @return returns the File chosen by the user to be the designated Order
+	 */
 	public File getOrder() {
 		return fileOrder;
 	}
 	
+	/**
+	 * 
+	 * @return returns the NumberOfStates Parameter which is needed for Random Restart or Local Beam Search
+	 * If no parameter is given because the user chose a different algorithm, the return is -1
+	 */
 	public int getParam() {
 		int i = -1;
 		try {
@@ -250,17 +269,29 @@ public class Gui extends JFrame {
 		return i;
 	}
 	
+	/**
+	 * 
+	 * checks if Submit-Warehouse-Button has been activated by user for Controller to receive the Warehouse-File
+	 */
 	public void addWareHouseListener(ActionListener action) {
 		btnSubmitWarehouse.addActionListener(action);
 		
 	}
 	
+	/**
+	 * 
+	 * checks if Submit-Order-Button has been activated by user for Controller to receive the Order-File
+	 */
 	public void addOrderListener(ActionListener action) {
 		btnSubmitOrder.addActionListener(action);
 		
 	}
 	
-	public void errorAlert(String s){
-		 errPane.showMessageDialog(null, s);
+	/**
+	 * 
+	 * @param s is an ErrorMessage created by the Controller to be displayed in case of an error
+	 */
+	public void errorAlert(String errmsg){
+		 errPane.showMessageDialog(null, errmsg);
 	}
 }
