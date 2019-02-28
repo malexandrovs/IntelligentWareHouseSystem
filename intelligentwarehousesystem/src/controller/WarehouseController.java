@@ -12,12 +12,13 @@ import view.Gui;
  * 
  * It uses inner classes as ActionListeners for the actions that the user may perform
  * in the GUI.
- * @author ma 
+ * @author Michael Alexandrovsky (malexandrovs@uos.de)
  */
 public class WarehouseController {
 
 	private Gui theView;
 	private WareHouseModel theModel;
+	private boolean warehouseSet;
 	
 	public WarehouseController(Gui theView, WareHouseModel theModel) {
 		
@@ -26,6 +27,8 @@ public class WarehouseController {
 		
 		this.theView.addWareHouseListener(new WarehouseListener());
 		this.theView.addOrderListener(new OrderListener());
+
+		warehouseSet  = false;
 	}
 	
 	/**
@@ -44,65 +47,54 @@ public class WarehouseController {
 		public void actionPerformed(ActionEvent arg0) {
 			File warehouseTxt = null;
 			
-			try {
-				warehouseTxt = theView.getWarehouse();
+
+			warehouseTxt = theView.getWarehouse();
 				
-			} catch (Exception e) {
-				// TODO: handle exception
-			}
 			
-			boolean wareHouseSet = theModel.initWarehouse(warehouseTxt);
+			warehouseSet = theModel.initWarehouse(warehouseTxt);
 		}
 		
 	}
-	
+	/**
+	 * OrderListener listens to the button, that submits the order and the alorithm in the GUI.
+	 * When the button is clicked, the search is started and an answer is returned.
+	 */
 	class OrderListener implements ActionListener{
-//OrderReceiver is activated when user presses Button in the GUI to submit an Order.
-//Order Receiver is given to the Button as an ActionListener
-//		The GUI needs the following Methods:
-		//public String getOrder();
-		//public String getAlg();
-		//public String getWareHousePath();
-		
-		//QUESTION: How to solve the Problem with local beam search and parallel Hill climbing (the need an additional parameter)
-		//Possible solution: wrapper class for searchAlg Info.?
+
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			// File orderTxt = null;
-			// int alg = 0;
-			// int param = 0;
+
 			boolean orderSet = true;
+
+			if(!warehouseSet){
+				theView.errorAlert("Please select the Warehouse first and submit it!");
+				return;
+			}
 			
-			// try {
-			// 	orderTxt = theView.getOrder();
-			// 	alg = theView.getAlgo();
-			// 	param = theView.getParam();
-			// }catch(Exception ex) {
-			// 	//TODO: Handle exception
-			// }
 			
 			try{
 				orderSet = theModel.initOrder(theView.getOrder());
 
 
 			} catch(InvalidOrderException e){
-				System.out.println("Your order had some "
-								+ "unaccepted items: \n" + e.getInvalidItems());
+				theView.errorAlert("Your order had some "
+				+ "unaccepted items: \n" + e.getInvalidItems());
 			}
 
-			if(orderSet){
+			if(!orderSet){
+				theView.errorAlert("There seems to be a problem with your order. Maybe you did not select a file? Please check.");
+				return;
+			}
 
-				theModel.startSearch(theView.getAlgo(), theView.getParam());
 			
-				try {
-					theView.setSolution(theModel.getResult());
-				} catch (Exception e) {
-					// TODO: handle exception
-				}
-			} else{
-				//alert window!!
-			}
+
+			theModel.startSearch(theView.getAlgo(), theView.getParam());
+		
+
+				theView.setSolution(theModel.getResult());
+
+
 
 		}
 		

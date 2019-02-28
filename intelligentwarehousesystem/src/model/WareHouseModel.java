@@ -12,6 +12,12 @@ import model.Algorithms;
 import model.StateHandler;
 import model.InvalidOrderException;
 
+/**
+ * Provides representation of the Warehouse and manages the Order search.
+ * 
+ * @author Michael Alexandrovsky (malexandrovs@uos.de)
+ */
+
 public class WareHouseModel {
 
 	// private String order;
@@ -21,9 +27,7 @@ public class WareHouseModel {
 	private int [] optimum;
 	private StateHandler stateHandler;
 
-	/**
-	 * Constructor of WareHouseModel
-	 */
+
 	public WareHouseModel(){
 		wareHouse = new HashMap<String, ArrayList<Integer>>();
 		psus = new HashMap<Integer,String>();
@@ -33,7 +37,7 @@ public class WareHouseModel {
 	 * Method to build the Warehouse representation. It receives a File-Object with the Warehouse.txt and builds
 	 * a HashMap with the Items as keys and the ArrayLists of PSUs that contain the items as values.
 	 *@return boolean true if setWarehouse was successful, false otherwise.
-	 *@param MISSING
+	 *@param wareHouseTxt a file object holding the .txt with the warehouse information.
 	 */
 	public boolean initWarehouse(File warehouseTxt){
 
@@ -80,6 +84,12 @@ public class WareHouseModel {
 		return successful;
  }
 
+ /**
+  * extracts relevant order information from the order.txt File and tests if the order is valid.
+  * @param orderTxt a File object holding the .txt with the order information.
+  * @return returns true if the order initialization was successful, false otherwise.
+  * @throws InvalodOrderException thrown if some items in the order are not stored in the warehouse.
+  */
  	public boolean initOrder(File orderTxt) throws InvalidOrderException{
 		 boolean successful = true;
 		 String[] order = null;
@@ -109,16 +119,10 @@ public class WareHouseModel {
 	  * Method to coordinate the actual search process.
 	  * @param alg is the code for the search algorithm.
 	  * @param param is the optional parameter that depends on the search algorithm
-	  * @param order
 	  */
 	public void startSearch(int alg, int param) {
 		optimum = null;
 
-		// stateHandler.setOrder(order);
-		// int[] initialState = stateHandler.generateInitialState();
-		// boolean orderValid = stateHandler.stateValid(initialState);
-		// if(!orderValid){ tell the user -> he should change the order
-	  	// and dont do any search (? or we remove the items which are not valid?)}
 		switch (alg){
 			case 0: optimum = algs.hillClimbing();
 				break;
@@ -158,7 +162,7 @@ public class WareHouseModel {
 			result.append("\n \n");
 		
 		}
-		System.out.println(result);
+
 		return result.toString();
 	}
 
