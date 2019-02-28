@@ -28,21 +28,24 @@ public class Gui extends JFrame {
 	private File fileWarehouse;
 	private File fileOrder;
 	private int algo;
+	private JButton btnSubmitWarehouse;
+	private JButton btnSubmitOrder;
+	private JTextArea txtAreaSolution;
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					Guitest frame = new Guitest();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		EventQueue.invokeLater(new Runnable() {
+//			public void run() {
+//				try {
+//					Gui frame = new Gui();
+//					frame.setVisible(true);
+//				} catch (Exception e) {
+//					e.printStackTrace();
+//				}
+//			}
+//		});
+//	}
 
 	/**
 	 * Create the frame.
@@ -141,7 +144,7 @@ public class Gui extends JFrame {
 		rButtonLBS.setBounds(214, 230, 157, 21);
 		contentPane.add(rButtonLBS);
 		
-		JTextArea txtAreaSolution = new JTextArea();
+		txtAreaSolution = new JTextArea();
 		txtAreaSolution.setText("The Solution will appear here:");
 		txtAreaSolution.setBounds(10, 299, 601, 134);
 		contentPane.add(txtAreaSolution);
@@ -181,23 +184,25 @@ public class Gui extends JFrame {
 		btnOrder.setBounds(234, 87, 115, 21);
 		contentPane.add(btnOrder);
 		
-		JButton btnSubmit = new JButton("Submit");
-		btnSubmit.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				//sends allll the data to controller
-			}
-		});
-		btnSubmit.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		btnSubmit.setBounds(234, 268, 115, 21);
-		contentPane.add(btnSubmit);
+		btnSubmitOrder = new JButton("Submit Order");
+		btnSubmitOrder.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnSubmitOrder.setBounds(234, 268, 137, 21);
+		contentPane.add(btnSubmitOrder);
 		
 		txtNumberOfStates = new JTextField();
 		txtNumberOfStates.setVisible(false);
 		txtNumberOfStates.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		txtNumberOfStates.setText("Enter Number of States");
-		txtNumberOfStates.setBounds(439, 220, 172, 19);
+		txtNumberOfStates.setBounds(417, 220, 172, 19);
 		contentPane.add(txtNumberOfStates);
 		txtNumberOfStates.setColumns(10);
+		
+		btnSubmitWarehouse = new JButton("Submit Warehouse");
+		btnSubmitWarehouse.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnSubmitWarehouse.setBounds(417, 53, 165, 21);
+		contentPane.add(btnSubmitWarehouse);
+		
+		
 	}
 	
 	
@@ -218,7 +223,31 @@ public class Gui extends JFrame {
 		return fileOrder;
 	}
 	
-	public int getExtraStates() {
-		return Integer.parseInt(txtNumberOfStates.getText());
+	public int getParam() {
+		int i = -1;
+		try {
+			i = Integer.parseInt(txtNumberOfStates.getText());
+		}
+		catch (NumberFormatException e) {
+			i = -1;
+		}
+		return i;
 	}
+	
+	public void addWareHouseListener(ActionListener action) {
+		btnSubmitWarehouse.addActionListener(action);
+		
+	}
+	
+	public void addOrderListener(ActionListener action) {
+		btnSubmitOrder.addActionListener(action);
+		
+	}
+	
+	public void errorAlert(String s){
+		   JOptionPane.showMessageDialog(null, s);
+	}
+	
+	
+	
 }
