@@ -62,7 +62,7 @@ public class Algorithms{
 
     //we perform simulated annealing until our temperature reaches 0
     for(int i = temperature; i > 0; i = temperature - 5){
-      if(temperatur >= 0){
+      if(temperature >= 0){
         temperature = temperature - 5;
       }
       for(int j = 0; j < neighbours.size(); j++){

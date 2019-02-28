@@ -158,7 +158,7 @@ public class WareHouseModel {
 			result.append("\n \n");
 		
 		}
-
+		System.out.println(result);
 		return result.toString();
 	}
 
