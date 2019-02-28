@@ -19,6 +19,9 @@ import javax.swing.JTextField;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JOptionPane;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.JScrollBar;
 
 public class Gui extends JFrame {
 
@@ -34,6 +37,8 @@ public class Gui extends JFrame {
 	private JTextArea txtAreaSolution;
 	private JLabel lblabelParam;
 	private JOptionPane errPane;
+	private JScrollPane jsp;
+
 	/**
 	 * Launch the application.
 	 */
@@ -74,12 +79,12 @@ public class Gui extends JFrame {
 		textLabelWarehouse.setBounds(10, 55, 176, 13);
 		contentPane.add(textLabelWarehouse);
 		
-		JLabel textLabelOrder = new JLabel("Please select an order:");
+		JLabel textLabelOrder = new JLabel("Please select an Order:");
 		textLabelOrder.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textLabelOrder.setBounds(10, 83, 157, 25);
 		contentPane.add(textLabelOrder);
 		
-		JLabel textLabelAlgo = new JLabel("Please select an algorithm:");
+		JLabel textLabelAlgo = new JLabel("Please select an Algorithm:");
 		textLabelAlgo.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		textLabelAlgo.setBounds(10, 139, 176, 19);
 		contentPane.add(textLabelAlgo);
@@ -153,9 +158,14 @@ public class Gui extends JFrame {
 		contentPane.add(rButtonLBS);
 		
 		txtAreaSolution = new JTextArea();
-		txtAreaSolution.setText("The Solution will appear here:");
-		txtAreaSolution.setBounds(10, 299, 601, 134);
+		txtAreaSolution.setEditable(true);
+		txtAreaSolution.setText("The Solution will appear here: ");
+		txtAreaSolution.setBounds(10, 299, 618, 124);
 		contentPane.add(txtAreaSolution);
+		
+		jsp = new JScrollPane (txtAreaSolution, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+		jsp.setBounds(10, 299, 618, 124);
+	    contentPane.add(jsp);
 		
 		JButton btnWarehouse = new JButton("Choose File");
 		btnWarehouse.addActionListener(new ActionListener() {
@@ -165,11 +175,7 @@ public class Gui extends JFrame {
 				
 				if( returnValue == JFileChooser.APPROVE_OPTION ){
 					fileWarehouse = openFileChooser.getSelectedFile();
-					
-				} else {
-					
-				} 
-						
+				} 		
 			}
 		});
 		btnWarehouse.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -183,9 +189,7 @@ public class Gui extends JFrame {
 				
 				if (returnValue == JFileChooser.APPROVE_OPTION ){
 					fileOrder = openFileChooser.getSelectedFile();
-				} else {
-					
-				}
+				} 
 			}
 		});
 		btnOrder.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -217,7 +221,6 @@ public class Gui extends JFrame {
 		
 		
 	}
-	
 	
 	
 	public void setSolution(String solution) {
