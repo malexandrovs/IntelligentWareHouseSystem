@@ -110,6 +110,11 @@ public class Algorithms{
   		current.add(newRandomState);
   	}
 
+    if(current.isEmpty()){
+      int[] nothing = new int[0];
+      return nothing;
+    }
+
 
   	List<int[]> currentNeighbours = new ArrayList<int[]>();
   	List<int[]> allNeighbours = new ArrayList<int[]>();
@@ -124,6 +129,10 @@ public class Algorithms{
   			currentNeighbours = stateMethods.createNeighbours(currentElement,false);
   			allNeighbours.addAll(currentNeighbours);
   		}
+
+      if(allNeighbours.isEmpty()){
+        return theBestNeighbour(current);
+      }
 
 
       //determine the numOfBeams best neighbours out of our complete neighbourhood
@@ -157,6 +166,10 @@ public class Algorithms{
 
         bestNeighbours.add(bestElement);
         allNeighbours.remove(positionToRemove);
+        
+        if(allNeighbours.isEmpty()){
+          break;
+        }
 
   		}
 
