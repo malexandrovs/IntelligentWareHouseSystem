@@ -165,6 +165,10 @@ public class Algorithms{
 
         bestNeighbours.add(bestElement);
         allNeighbours.remove(positionToRemove);
+        
+        if(allNeighbours.isEmpty()){
+          break;
+        }
 
   		}
 
