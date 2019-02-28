@@ -29,7 +29,7 @@ public class Algorithms{
     int stateValue = stateMethods.evaluate(finalState);
 
     for(int iteration = 0; iteration < 100; iteration ++){
-       List<int[]> neighbours = stateMethods.createNeighbours(finalState, false);
+       List<int[]> neighbours = stateMethods.createNeighbours(finalState);
 
        int[] bestNeighbour = theBestNeighbour(neighbours);
        int newValue = stateMethods.evaluate(bestNeighbour);
@@ -52,17 +52,19 @@ public class Algorithms{
 
   public int[] simulatedAnnealing(){
 
-    this.finalState = stateMethods.generateInitialState();
+    this.finalState = stateMethods.generateRandomState();
     int temperature = 100;
 
-    List<int[]> neighbours = stateMethods.createNeighbours(finalState, true);
+    List<int[]> neighbours = stateMethods.createNeighbours(finalState);
 
     int stateValue = stateMethods.evaluate(finalState);
 
 
     //we perform simulated annealing until our temperature reaches 0
     for(int i = temperature; i > 0; i = temperature - 5){
-      temperature = temperature - 5;
+      if(temperatur >= 0){
+        temperature = temperature - 5;
+      }
       for(int j = 0; j < neighbours.size(); j++){
         int[] newState = neighbours.get(j);
 
@@ -126,7 +128,7 @@ public class Algorithms{
 
   		for(int position = 0; position < current.size(); position ++){
   			currentElement = current.get(position);
-  			currentNeighbours = stateMethods.createNeighbours(currentElement,false);
+  			currentNeighbours = stateMethods.createNeighbours(currentElement);
   			allNeighbours.addAll(currentNeighbours);
   		}
 
@@ -166,7 +168,7 @@ public class Algorithms{
 
         bestNeighbours.add(bestElement);
         allNeighbours.remove(positionToRemove);
-        
+
         if(allNeighbours.isEmpty()){
           break;
         }
@@ -249,7 +251,7 @@ public class Algorithms{
 
     for(int iteration = 0; iteration < 100; iteration ++){
 
-      neighbours= stateMethods.createNeighbours(finalState, false);
+      neighbours= stateMethods.createNeighbours(finalState);
 
       int stateValue = stateMethods.evaluate(finalState);
 
