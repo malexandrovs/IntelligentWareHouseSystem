@@ -15,7 +15,7 @@ import static java.util.Map.Entry.*;
 public class StateHandler {
 
   private String[] order = null;
-  //two representations make it easier to create different evaluation functions 
+  //two representations make it easier to create different evaluation functions
   //and leads to higher flexibility and faster runtime (different processes can use different representations
   private Map<String, ArrayList<Integer>> itemWarehouse = new HashMap<String, ArrayList<Integer>>();
   private Map<Integer, String[]> psuWarehouse = new HashMap<Integer, String[]>();
@@ -61,16 +61,18 @@ public class StateHandler {
       psuWarehouse.put(psu, psuWarehouseString.get(psu).split(" "));
     }
   }
-  /** The evaluation function which worked best for the given problem.
-   * @param state of type int[] which shall be evaluated. The state is constructed in 
+
+  /** The evaluation function which worked as good as evaluateMorePrecise for the problem.
+   * Could be replaced by evaluateMorePrecise for other problems.
+   * @param state of type int[] which shall be evaluated. The state is constructed in
    * the following way: the ith position of state corresponds to the ith position of the order.
    * Consequently, the state describes psus which contain at least one item of the order.
    * @return int, a number describing how good a state is. The higher the number, the better.
-   * The method finds out how many items of the order each psu contains. The psu containing the 
-   * most items will be considered with factor 100.
+   * The method finds out how many items of the order each psu contains. The psu containing the
+   * most items will be considered with factor 10*length of state (-> depending on the order)
    */
   public int evaluate(int[] state){
-    int evaluationResult = -1;
+    int evaluationResult = 0;
     int[] consideredValues = new int[state.length];
     for(int psu = 0; psu < state.length; psu++){
       int valueOfPSU = this.evaluationMap.get(state[psu]);
@@ -78,10 +80,31 @@ public class StateHandler {
       consideredValues[psu] = valueOfPSU;
     }
     int bestPSU = Arrays.stream(consideredValues).max().getAsInt();
-    //more general: evaluationResult + (bestPSU*10*state.length) - bestPSU
-    //even better: Arrays.sort(consideredValues)
-    //             and for each value: 2^value
-    return evaluationResult + (bestPSU * 100) - bestPSU;
+    return evaluationResult + (bestPSU * 10 * state.length) - bestPSU;
+  }
+
+  /** The evaluation function evaluateMorePrecise is an alternative for the
+   * the normal evaluate function.
+   * @param state of type int[] which shall be evaluated. The state is constructed in
+   * the following way: the ith position of state corresponds to the ith position of the order.
+   * Consequently, the state describes psus which contain at least one item of the order.
+   * @return int, a number describing how good a state is. The higher the number, the better.
+   * The method finds out how many items of the order each psu contains. Each value is calculated
+   * as 5 power to the value. All values are added. The more items a psu contains, the higher its value.
+   */
+  public int evaluateMorePrecise(int[] state){
+    int evaluationResult = 0;
+    int[] consideredValues = new int[state.length];
+    for(int psu = 0; psu < state.length; psu++){
+      int valueOfPSU = this.evaluationMap.get(state[psu]);
+      consideredValues[psu] = valueOfPSU;
+    }
+    int bestPSU = Arrays.stream(consideredValues).max().getAsInt();
+    Arrays.sort(consideredValues);
+    for (int val = 0; val < consideredValues.length; val++){
+      evaluationResult = (int)(evaluationResult + (Math.pow(5, consideredValues[val])));
+    }
+    return evaluationResult;
   }
 
   /** Creates the neighbours of a given State.
@@ -166,7 +189,7 @@ public class StateHandler {
 
   /**Method for changing or setting the order.
    * Order hast to be set before generateInitialState
-   * generateRandomState or createNeighbours. 
+   * generateRandomState or createNeighbours.
    * The evaluation map is initialized here, because it depends on the order.
    *@param order of type String[] which should be set.
    */
@@ -213,11 +236,11 @@ public class StateHandler {
     List<Integer> list = Arrays.stream(state).boxed().collect(Collectors.toList());
     return (!list.contains(-1));
   }
-	
+
   /** Shows the PSUs used in order to get all items of the order.
-   *@return int[] containing i psus. The order of the psus does not 
+   *@return int[] containing i psus. The order of the psus does not
    * correspond anymore to the order of the wanted items.
-   *@param state of type[] which should be translated in the psus used 
+   *@param state of type[] which should be translated in the psus used
    *for fulfilling the order.
    */
   public int[] showUsedPSUs(int[] state){
@@ -268,7 +291,7 @@ public class StateHandler {
     System.out.println("@StateHandler: used PSUs" + Arrays.toString(result));
     return result;
   }
-  
+
   /** Returns the number of used psus of a certain state.
    *@return int, the number of used psus.
    *@param state of type int[].
