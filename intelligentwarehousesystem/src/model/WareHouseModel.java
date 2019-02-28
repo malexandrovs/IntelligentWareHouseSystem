@@ -141,13 +141,25 @@ public class WareHouseModel {
 	public String getResult() {
 		int[] usedPSUs = stateHandler.showUsedPSUs(optimum);
 
-		String result = "This solution uses " + usedPSUs.length + " PSUs. \nThe used PSUs used are: \n \n \n";
+		StringBuilder result = new StringBuilder();
+
+		result.append("This solution uses ");
+		result.append(usedPSUs.length);
+		result.append(" PSUs. \nThe used PSUs are: \n \n \n");
+
+		
+
 
 		for (int psu : usedPSUs) {
-			result = result + psu + " - with the following items: " + psus.get(psu) + "\n \n";
+
+			result.append(psu);
+			result.append(" - with the following items: ");
+			result.append(psus.get(psu));
+			result.append("\n \n");
+		
 		}
 
-		return result;
+		return result.toString();
 	}
 
 	/**
