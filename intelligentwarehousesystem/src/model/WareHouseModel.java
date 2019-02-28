@@ -71,7 +71,7 @@ public class WareHouseModel {
 			successful = false;
 		}
 		//j: Changed Class -> no singleton anymore, I changed your call accordingly
-		stateHandler = new StateHandler(wareHouse);
+		stateHandler = new StateHandler(wareHouse,psus);
 		algs = new Algorithms(stateHandler);
 
 		return successful;
@@ -98,6 +98,7 @@ public class WareHouseModel {
 	  * @param order
 	  */
 	public void startSearch(int alg, int param) {
+		optimum = null;
 
 		// stateHandler.setOrder(order);
 		// int[] initialState = stateHandler.generateInitialState();
