@@ -101,7 +101,7 @@ public class Gui extends JFrame {
 		JRadioButton rButtonFCHC = new JRadioButton("First Choice Hill Climbing");
 		rButtonFCHC.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				algo = 1;
+				algo = 4;
 				txtNumberOfStates.setVisible(false);
 				lblabelParam.setVisible(false);
 				
@@ -115,7 +115,7 @@ public class Gui extends JFrame {
 		JRadioButton rButtonSA = new JRadioButton("Simulated Annealing");
 		rButtonSA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				algo = 2;
+				algo = 1;
 				txtNumberOfStates.setVisible(false);
 				lblabelParam.setVisible(false);
 			}
@@ -143,7 +143,7 @@ public class Gui extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				txtNumberOfStates.setVisible(true);
 				lblabelParam.setVisible(true);
-				algo = 4;
+				algo = 2;
 				
 			}
 		});
