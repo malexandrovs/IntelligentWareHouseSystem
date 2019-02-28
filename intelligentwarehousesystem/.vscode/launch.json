@@ -1,0 +1,18 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - WarehouseTest",
+            "request": "launch",
+            "mainClass": "WarehouseTest",
+            "projectName": "intelligentwarehousesystem_950d1038"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Guitest",
+            "request": "launch",
+            "mainClass": "Guitest",
+            "projectName": "intelligentwarehousesystem_950d1038"
+        }
+    ]
+}

@@ -148,8 +148,6 @@ public class Algorithms{
 
   	for(int iteration = 0; iteration < 100; iteration ++){
 
-  	for(int iteration = 0; iteration < 100; iteration ++){
-
   		for(int position = 0; position < current.size(); position ++){
   			currentElement = current.get(position);
   			currentNeighbours = stateMethods.createNeighbours(currentElement,false);
@@ -273,7 +271,7 @@ public class Algorithms{
 
       int[] newState = neighbours.remove(0);
       boolean betterNeighbourFound = false;
-      do{
+      while(!betterNeighbourFound||!neighbours.isEmpty()){
         if(newState == null){
           return this.finalState;
         }
