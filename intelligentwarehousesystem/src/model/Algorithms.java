@@ -29,7 +29,7 @@ public class Algorithms{
     int stateValue = stateMethods.evaluate(finalState);
 
     for(int iteration = 0; iteration < 100; iteration ++){
-       List<int[]> neighbours = stateMethods.createNeighbours(finalState);
+       ArrayList<int[]> neighbours = stateMethods.createNeighbours(finalState);
 
        int[] bestNeighbour = theBestNeighbour(neighbours);
        int newValue = stateMethods.evaluate(bestNeighbour);
@@ -55,7 +55,7 @@ public class Algorithms{
     this.finalState = stateMethods.generateRandomState();
     int temperature = 100;
 
-    List<int[]> neighbours = stateMethods.createNeighbours(finalState);
+    ArrayList<int[]> neighbours = stateMethods.createNeighbours(finalState);
 
     int stateValue = stateMethods.evaluate(finalState);
 
@@ -102,7 +102,7 @@ public class Algorithms{
 
   public int[] localBeam(int numOfBeams){
 
-    List<int[]> current = new ArrayList<int[]>();
+    ArrayList<int[]> current = new ArrayList<int[]>();
 
 
   	for(int randomState = 0; randomState < numOfBeams; randomState ++){
@@ -118,8 +118,8 @@ public class Algorithms{
     }
 
 
-  	List<int[]> currentNeighbours = new ArrayList<int[]>();
-  	List<int[]> allNeighbours = new ArrayList<int[]>();
+  	ArrayList<int[]> currentNeighbours = new ArrayList<int[]>();
+  	ArrayList<int[]> allNeighbours = new ArrayList<int[]>();
 
   	int[] currentElement;
 
@@ -140,7 +140,7 @@ public class Algorithms{
       //determine the numOfBeams best neighbours out of our complete neighbourhood
   		int[] bestElement;
   		int bestValue;
-  		List<int[]> bestNeighbours = new ArrayList<int[]>();
+  		ArrayList<int[]> bestNeighbours = new ArrayList<int[]>();
   		int[] nextElement;
   		int nextValue;
       int positionToRemove;
@@ -205,7 +205,7 @@ public class Algorithms{
         return theBestNeighbour(current);
       }
 
-      // bestNeighbours.clear();
+      bestNeighbours.clear();
   	}
     return theBestNeighbour(current);
   }
@@ -247,7 +247,7 @@ public class Algorithms{
 
   public int[] firstChoiceHillClimbing(){
     this.finalState = stateMethods.generateRandomState();
-    List<int[]> neighbours = new ArrayList<int[]>();
+    ArrayList<int[]> neighbours = new ArrayList<int[]>();
 
     for(int iteration = 0; iteration < 100; iteration ++){
 
@@ -282,7 +282,7 @@ public class Algorithms{
   * @return we return the best state from the list of states, a.k.a. the best neighbour from our neighbourhood
   */
 
-  public int[] theBestNeighbour(List<int[]> neighbours){
+  public int[] theBestNeighbour(ArrayList<int[]> neighbours){
     if(neighbours.isEmpty()){
       int[] empty = new int[1];
       return empty;
