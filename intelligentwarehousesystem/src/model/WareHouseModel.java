@@ -119,23 +119,28 @@ public class WareHouseModel {
 		}
 	}
 
-	//j: not done yet?
-	/**get PSU number
-	 *@return String with elements
+	/**
+	 * Returns the result string, containing relevant information about the search: The number of PSUs that are used in the proposed solution,
+	 * the individual PSUs and the items they contain.
+	 *@return returns amswer String for the user
   	 */
 	public String getResult() {
 		int[] usedPSUs = stateHandler.showUsedPSUs(optimum);
 
-		String result = "This solution uses " + usedPSUs.length + " PSUs. \nThe PSUs used are: \n";
+		String result = "This solution uses " + usedPSUs.length + " PSUs. \nThe used PSUs used are: \n \n \n";
 
 		for (int psu : usedPSUs) {
-			result = result + psu + " - with the following items: " + psus.get(psu) + "\n";
+			result = result + psu + " - with the following items: " + psus.get(psu) + "\n \n";
 		}
-
-
 
 		return result;
 	}
+
+	/**
+	 * Returns a HashMap<String,int[]>, where the Key is the name of the item as a String and
+	 * the value is an int-array with the identifieres of the PSUs that contain the item.
+	 * @return Returns a HashMap<String,int[]> as a representation of the warehouse.
+	 */
 	public HashMap getWarehouse() {
 		return wareHouse;
 	}
