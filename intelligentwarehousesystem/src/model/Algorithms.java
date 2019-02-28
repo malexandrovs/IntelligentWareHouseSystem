@@ -62,7 +62,7 @@ public class Algorithms{
 
     //we perform simulated annealing until our temperature reaches 0
     for(int i = temperature; i > 0; i = temperature - 5){
-      if(temperature >= 0){
+      if(temperatur >= 0){
         temperature = temperature - 5;
       }
       for(int j = 0; j < neighbours.size(); j++){
@@ -285,6 +285,7 @@ public class Algorithms{
   public int[] theBestNeighbour(List<int[]> neighbours){
     if(neighbours.isEmpty()){
       int[] empty = new int[0];
+      return empty;
     }
    int[] currentBest = neighbours.get(0);
    int currentBestValue = stateMethods.evaluate(currentBest);
@@ -302,4 +303,3 @@ public class Algorithms{
    return currentBest;
   }
 }
-
