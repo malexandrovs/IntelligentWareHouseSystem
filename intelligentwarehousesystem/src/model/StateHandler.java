@@ -119,7 +119,7 @@ public class StateHandler {
     }
 
   /**
-   *Generates a Random State, if order given beforehand
+   *Generates a Random State, if order given beforehand.
    *@return int[], the random state. The ith number of the array represents
    * a PSU that contains the ith item of the order. -1 stands for item
    * not contained in the warehouse.
@@ -128,7 +128,7 @@ public class StateHandler {
     Random randomGenerator = new Random();
     int[] randomState = new int[order.length];
     //go through the order
-    //catch for each element of the order a random number of the corresponding ArrayList<Integer>
+    //catch for each item of the order a random psu containing that item
     for(int i = 0; i < order.length; i++){
       String currentItem = order[i];
       ArrayList<Integer> allPSUsContainingItem = itemWarehouse.get(currentItem);
@@ -143,15 +143,15 @@ public class StateHandler {
   }
 
   /**
-   * Generates an initial State if order is given beforehand
+   * Generates an initial State if order is given beforehand.
    *@return int[], the first initial state. The ith number of the array represents
    * a PSU that contains the ith item of the order. -1 stands for item
    * not contained in the warehouse.
    */
   public int[] generateInitialState() {
     int[] initialState = new int[order.length];
-    //goes through the order and assigns for each item
-    //the first PSU contained in the ArrayList "allPSUsContainingItem"
+    //goes through the order and assigns for each item of the order
+    //the first PSU containing that item
     for(int i = 0; i < order.length; i++){
       String currentItem = order[i];
       ArrayList<Integer> allPSUsContainingItem = itemWarehouse.get(currentItem);
@@ -166,8 +166,8 @@ public class StateHandler {
 
   /**Method for changing or setting the order.
    * Order hast to be set before generateInitialState
-   * generateRandomState or createNeighbours. We also initialize
-   * values for our evaluation function here.
+   * generateRandomState or createNeighbours. 
+   * The evaluation map is initialized here, because it depends on the order.
    *@param order of type String[] which should be set.
    */
   public void setOrder(String[] order){
@@ -176,7 +176,7 @@ public class StateHandler {
     } else {
       this.order = order;
       List<String> orderList = Arrays.asList(this.order);
-      //initialize EvaluationMap
+      //initializing the EvaluationMap
       //each psu gets a value describing how many items of the order it holds
       for(int i = 0; i < psuWarehouse.size(); i++){
         String[] allItems = psuWarehouse.get(i);
@@ -213,6 +213,7 @@ public class StateHandler {
     List<Integer> list = Arrays.stream(state).boxed().collect(Collectors.toList());
     return (!list.contains(-1));
   }
+	
   /**
    *@return int[] containing i ints. The ith value corresponds to
    * the ith ordered item.
