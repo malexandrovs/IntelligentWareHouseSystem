@@ -205,7 +205,7 @@ public class Algorithms{
         return theBestNeighbour(current);
       }
 
-      bestNeighbours.clear();
+      // bestNeighbours.clear();
   	}
     return theBestNeighbour(current);
   }
