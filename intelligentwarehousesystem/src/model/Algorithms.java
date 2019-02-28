@@ -28,26 +28,17 @@ public class Algorithms{
   * @return we return the best state our search algorithm has found
   */
   public int[] hillClimbing(){
-    System.out.println("@HillClimbing: I am entering hillClimbing!!");
     this.finalState = stateMethods.generateRandomState();
 
     int stateValue = stateMethods.evaluate(finalState);
     System.out.println("Initial State Value: " + stateValue);
 
-//    if(stateValue == stateMethods.optimum()){
-//      System.out.println("Optimal State!");
-//      return this.finalState;
-//    }
-    System.out.println("Starting 10000 iterations");
     for(int iteration = 0; iteration < 100; iteration ++){
-       List<int[]> neighbours = stateMethods.createNeighbours(finalState, false);
+       List<int[]> neighbours = stateMethods.createNeighbours(finalState);
 
        int[] bestNeighbour = theBestNeighbour(neighbours);
        int newValue = stateMethods.evaluate(bestNeighbour);
 
-       if(newValue == stateMethods.optimum()){
-         return bestNeighbour;
-       }
 
        if(newValue <= stateValue){
          return finalState;
@@ -55,7 +46,7 @@ public class Algorithms{
 
        this.finalState = bestNeighbour;
     }
-    System.out.println("End of For loop");
+    System.out.println("Final State Value: " + stateMethods.evaluate(finalState));
     return this.finalState;
   }
 
@@ -71,39 +62,23 @@ public class Algorithms{
   */
 
   public int[] simulatedAnnealing(){
-
     this.finalState = stateMethods.generateInitialState();
-    int temperature = 100;
-
-    List<int[]> neighbours = stateMethods.createNeighbours(finalState, true);
-
+    System.out.println("First State Value: " + stateMethods.evaluate(finalState));
+    int temperature = 1000;
+    List<int[]> neighbours = stateMethods.createNeighbours(finalState);
     int stateValue = stateMethods.evaluate(finalState);
-
-
-    if(stateValue == stateMethods.optimum()){
-       return this.finalState;
-    }
-
     //we perform simulated annealing until our temperature reaches 0
     for(int i = temperature; i > 0; i = temperature - 5){
       temperature = temperature - 5;
       for(int j = 0; j < neighbours.size(); j++){
         int[] newState = neighbours.get(j);
-
         if(newState == null){
           return finalState;
         }
-
         int newValue = stateMethods.evaluate(newState);
-
-        if(newValue == stateMethods.optimum()){
-          return newState;
-        }
-
         int deltaValue = newValue - stateValue;
         Random downstep = new Random();
         double probability = downstep.nextDouble();
-
         if(deltaValue > 0){
           stateValue = newValue;
           this.finalState = newState;
@@ -113,114 +88,127 @@ public class Algorithms{
           stateValue = newValue;
         }
       }
-
     }
+    System.out.println("Final State Value: " + stateMethods.evaluate(finalState));
     return finalState;
   }
 
 
   /**
-  * This method is the implemented local Beam Search Algorithm
-  * @param numOfBeams; this is the lenght of the list of states we want to get in the end
-  * @param current; a list of states, which contains the overall best combination of states at the end
-  * @param allNeighbours; a list of the complete neighbourhood of every state in our current list
-  * @param bestNeighbours; contains numOfBeams many best neighbours from the allNeighbours list
-  * @return we return the best state of our list of states, which were determined the best as a whole by the algorithm
-  */
+    * This method is the implemented local Beam Search Algorithm
+    * @param numOfBeams this is the numer of beams (states) the algorithm operates on
+    * @return we return the best state of our list of states, which were determined the best as a whole by the algorithm
+    */
 
-  public int[] localBeam(int numOfBeams){
+    public int[] localBeam(int numOfBeams){
 
-    List<int[]> current = new ArrayList<int[]>();
+      List<int[]> current = new ArrayList<int[]>();
 
 
-  	for(int randomState = 0; randomState < numOfBeams; randomState ++){
+        for(int randomState = 0; randomState < numOfBeams; randomState ++){
 
-  		int[] newRandomState = stateMethods.generateRandomState();
+            int[] newRandomState = stateMethods.generateRandomState();
 
-  		current.add(newRandomState);
-  	}
+            current.add(newRandomState);
+        }
 
-
-  	List<int[]> currentNeighbours = new ArrayList<int[]>();
-  	List<int[]> allNeighbours = new ArrayList<int[]>();
-
-  	int[] currentElement;
-
-  	for(int iteration = 0; iteration < 100; iteration ++){
+      if(current.isEmpty()){
+        int[] nothing = new int[0];
+        return nothing;
+      }
 
 
-  		for(int position = 0; position < numOfBeams; position ++){
-  			currentElement = current.get(position);
-  			currentNeighbours = stateMethods.createNeighbours(currentElement,false);
-  			allNeighbours.addAll(currentNeighbours);
-  		}
+        List<int[]> currentNeighbours = new ArrayList<int[]>();
+        List<int[]> allNeighbours = new ArrayList<int[]>();
+
+        int[] currentElement;
+
+        for(int iteration = 0; iteration < 100; iteration ++){
 
 
-      //determine the numOfBeams best neighbours out of our complete neighbourhood
-  		int[] bestElement;
-  		int bestValue;
-  		List<int[]> bestNeighbours = new ArrayList<int[]>();
-  		int[] nextElement;
-  		int nextValue;
-      int positionToRemove;
+            for(int position = 0; position < current.size(); position ++){
+                currentElement = current.get(position);
+                currentNeighbours = stateMethods.createNeighbours(currentElement);
+                allNeighbours.addAll(currentNeighbours);
+            }
 
-  		for(int position = 0; position < numOfBeams; position ++){
-  			bestElement = allNeighbours.get(0);
-  			bestValue = stateMethods.evaluate(bestElement);
-        positionToRemove = 0;
+        if(allNeighbours.isEmpty()){
+          return theBestNeighbour(current);
+        }
 
 
-  			for(int pos = 0; pos < allNeighbours.size(); pos ++){
-  				nextElement = allNeighbours.get(pos);
-          nextValue = stateMethods.evaluate(nextElement);
+        //determine the numOfBeams best neighbours out of our complete neighbourhood
+            int[] bestElement;
+            int bestValue;
+            List<int[]> bestNeighbours = new ArrayList<int[]>();
+            int[] nextElement;
+            int nextValue;
+        int positionToRemove;
 
-          if(nextValue > bestValue){
-            bestElement = nextElement;
-            bestValue = nextValue;
-            positionToRemove = pos;
+            for(int position = 0; position < numOfBeams; position ++){
+          if(allNeighbours.isEmpty()){
+            return theBestNeighbour(current);
           }
-  			}
+                bestElement = allNeighbours.get(0);
+                bestValue = stateMethods.evaluate(bestElement);
+          positionToRemove = 0;
 
 
-        bestNeighbours.add(bestElement);
-        allNeighbours.remove(positionToRemove);
+                for(int pos = 0; pos < allNeighbours.size(); pos ++){
+                    nextElement = allNeighbours.get(pos);
+            nextValue = stateMethods.evaluate(nextElement);
 
-  		}
-
-      allNeighbours.clear();
-
-      //compare the overall value of our current list and the bestNeighbours list
-      int allCurrentValues = 0;
-      int allBestNeighbourValues = 0;
-      int[] element;
-      int elementValue;
-
-      for(int position = 0; position < current.size(); position ++){
-        element = current.get(position);
-        elementValue = stateMethods.evaluate(element);
-        allCurrentValues = allCurrentValues + elementValue;
-      }
+            if(nextValue > bestValue){
+              bestElement = nextElement;
+              bestValue = nextValue;
+              positionToRemove = pos;
+            }
+                }
 
 
-      for(int position = 0; position < bestNeighbours.size(); position ++){
-        element = bestNeighbours.get(position);
-        elementValue = stateMethods.evaluate(element);
-        allBestNeighbourValues = allBestNeighbourValues + elementValue;
-      }
+          bestNeighbours.add(bestElement);
+          allNeighbours.remove(positionToRemove);
+
+          if(allNeighbours.isEmpty()){
+            break;
+          }
+
+            }
+
+        allNeighbours.clear();
+
+        //compare the overall value of our current list and the bestNeighbours list
+        int allCurrentValues = 0;
+        int allBestNeighbourValues = 0;
+        int[] element;
+        int elementValue;
+
+        for(int position = 0; position < current.size(); position ++){
+          element = current.get(position);
+          elementValue = stateMethods.evaluate(element);
+          allCurrentValues = allCurrentValues + elementValue;
+        }
 
 
-      if(allBestNeighbourValues > allCurrentValues){
-        current = bestNeighbours;
-      }
+        for(int position = 0; position < bestNeighbours.size(); position ++){
+          element = bestNeighbours.get(position);
+          elementValue = stateMethods.evaluate(element);
+          allBestNeighbourValues = allBestNeighbourValues + elementValue;
+        }
 
-      else{
-        return theBestNeighbour(current);
-      }
 
-      bestNeighbours.clear();
-  	}
-    return theBestNeighbour(current);
-  }
+        if(allBestNeighbourValues > allCurrentValues){
+          current = bestNeighbours;
+        }
+
+        else{
+          return theBestNeighbour(current);
+        }
+
+        bestNeighbours.clear();
+        }
+      return theBestNeighbour(current);
+    }
 
 
   /**
@@ -233,6 +221,7 @@ public class Algorithms{
   public int[] randomRestartHillClimbing(int iterations){
 
     this.finalState = stateMethods.generateRandomState();
+    System.out.println("First State Value: " + stateMethods.evaluate(finalState));
     int[] newState;
     int finalValue = 0;
     int newValue = 0;
@@ -247,7 +236,7 @@ public class Algorithms{
         finalState = newState;
       }
     }
-
+    System.out.println("Final State Value: " + stateMethods.evaluate(finalState));
     return finalState;
   }
 
@@ -261,61 +250,60 @@ public class Algorithms{
   */
 
   public int[] firstChoiceHillClimbing(){
-    this.finalState = stateMethods.generateRandomState();
+  this.finalState = stateMethods.generateRandomState();
+  System.out.println("First Value: " + finalState);
+  List<int[]> neighbours = new ArrayList<int[]>();
 
-    for(int iteration = 0; iteration < 100; iteration ++){
-      List<int[]> neighbours = new ArrayList<int[]>();
-      neighbours= stateMethods.createNeighbours(finalState, false);
+  for(int iteration = 0; iteration < 100; iteration ++){
 
-      int stateValue = stateMethods.evaluate(finalState);
+    neighbours= stateMethods.createNeighbours(finalState);
 
-      if(stateValue == stateMethods.optimum()){
-        return finalState;
+    int stateValue = stateMethods.evaluate(finalState);
+
+
+    int[] newState = neighbours.get(0);
+    neighbours.remove(0);
+    boolean betterNeighbourFound = false;
+    while(!betterNeighbourFound||!neighbours.isEmpty()){
+
+      int newValue = stateMethods.evaluate(newState);
+
+      if(newValue >= stateValue){
+        this.finalState = newState;
+        betterNeighbourFound = true;
       }
-
-      int[] newState = neighbours.remove(0);
-      boolean betterNeighbourFound = false;
-      do{
-        if(newState == null){
-          return this.finalState;
-        }
-
-        int newValue = stateMethods.evaluate(newState);
-
-        if(newValue >= stateValue){
-          this.finalState = newState;
-          betterNeighbourFound = true;
-        }
-        newState = neighbours.remove(0);
-      }while(!betterNeighbourFound||newState != null);
+      newState = neighbours.get(0);
+      neighbours.remove(0);
     }
-
-    return finalState;
+    return this.finalState;
   }
+  System.out.println("Final Value: "+ finalState);
+  return this.finalState;
+}
 
-  /**
-  * this method is used to determine the best state in a list of states, a.k.a. the best neighbour in a neighbourhood
-  * @param currentBest; the currently best state we have
-  * @param currentBestValue; currently the best value, which is determined by currentBest
-  * @param newValue; the value of the state we compare to currentBest
-  * @param newState; the state we compare to currentBest
-  * @return we return the best state from the list of states, a.k.a. the best neighbour from our neighbourhood
-  */
+/**
+* this method is used to determine the best state in a list of states, a.k.a. the best neighbour in a neighbourhood
+* @param neighbours this is the list of neighbours of a state from which the method returns the best single state
+* @return we return the best state from the list of states, a.k.a. the best neighbour from our neighbourhood
+*/
 
-  public int[] theBestNeighbour(List<int[]> neighbours){
-   int[] currentBest = neighbours.get(0);
-   int currentBestValue = stateMethods.evaluate(currentBest);
-   int newValue = 0;
-   int[] newState;
+public int[] theBestNeighbour(List<int[]> neighbours){
+  if(neighbours.isEmpty()){
+    int[] empty = new int[0];
+  }
+ int[] currentBest = neighbours.get(0);
+ int currentBestValue = stateMethods.evaluate(currentBest);
+ int newValue = 0;
+ int[] newState;
 
-   for(int position = 1; position < neighbours.size(); position ++){
-     newState = neighbours.get(position);
-     newValue = stateMethods.evaluate(newState);
-     if(currentBestValue < newValue){
-       currentBest = newState;
-       currentBestValue = newValue;
-     }
+ for(int position = 1; position < neighbours.size(); position ++){
+   newState = neighbours.get(position);
+   newValue = stateMethods.evaluate(newState);
+   if(currentBestValue < newValue){
+     currentBest = newState;
+     currentBestValue = newValue;
    }
-   return currentBest;
-  }
+ }
+ return currentBest;
+}
 }
