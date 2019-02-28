@@ -1,10 +1,3 @@
-//most of this code is auto-generated using eclipse
-// some things are in comments because they should work in theory but eclipse won't let me look at the GUI if they are there
-//things that are still missing:
-// - proper error-handling
-
-
-
 package guitest;
 
 import java.awt.BorderLayout;
@@ -22,16 +15,19 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.io.File;
+import javax.swing.JTextField;
 import javax.swing.JFileChooser;
-//import javax.swing.fileChooser.FileNameExtensionFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Guitest extends JFrame {
 
 	private JPanel contentPane;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
 	private final JFileChooser openFileChooser;
-	private fileWarehouse;
-	private fileOrder;
+	private JTextField txtNumberOfStates;
+	private File fileWarehouse;
+	private File fileOrder;
+	private int algo;
 	/**
 	 * Launch the application.
 	 */
@@ -39,7 +35,7 @@ public class Guitest extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					guitest frame = new guitest();
+					Guitest frame = new Guitest();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -59,8 +55,8 @@ public class Guitest extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		//openFileChooser = new JFileChooser();
-		//openFileChooser.setFileFilter(new FileNameExtensionFilter("TXT files", "txt"));
+		openFileChooser = new JFileChooser();
+		openFileChooser.setFileFilter(new FileNameExtensionFilter("TXT files", "txt"));
 		
 		JLabel TextLabelWelcome = new JLabel("Welcome to the IntelligentWareHouseApp!");
 		TextLabelWelcome.setFont(new Font("Tahoma", Font.PLAIN, 18));
@@ -83,18 +79,38 @@ public class Guitest extends JFrame {
 		contentPane.add(textLabelAlgo);
 		
 		JRadioButton rButtonHC = new JRadioButton("Hill-Climbing");
+		rButtonHC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				algo = 0;
+				txtNumberOfStates.setVisible(false);
+				
+			}
+		});
 		buttonGroup.add(rButtonHC);
 		rButtonHC.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		rButtonHC.setBounds(214, 138, 105, 21);
 		contentPane.add(rButtonHC);
 		
 		JRadioButton rButtonFCHC = new JRadioButton("First Choice Hill Climbing");
+		rButtonFCHC.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				algo = 1;
+				txtNumberOfStates.setVisible(false);
+				
+			}
+		});
 		buttonGroup.add(rButtonFCHC);
 		rButtonFCHC.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		rButtonFCHC.setBounds(214, 161, 194, 21);
 		contentPane.add(rButtonFCHC);
 		
 		JRadioButton rButtonSA = new JRadioButton("Simulated Annealing");
+		rButtonSA.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				algo = 2;
+				txtNumberOfStates.setVisible(false);
+			}
+		});
 		buttonGroup.add(rButtonSA);
 		rButtonSA.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		rButtonSA.setBounds(214, 184, 157, 21);
@@ -103,7 +119,8 @@ public class Guitest extends JFrame {
 		JRadioButton rButtonRR = new JRadioButton("Random Restart");
 		rButtonRR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				txtNumberOfStates.setVisible(true);
+				algo = 3;
 			}
 		});
 		buttonGroup.add(rButtonRR);
@@ -114,7 +131,8 @@ public class Guitest extends JFrame {
 		JRadioButton rButtonLBS = new JRadioButton("Local Beam Search");
 		rButtonLBS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				txtNumberOfStates.setVisible(true);
+				algo = 4;
 				
 			}
 		});
@@ -132,14 +150,14 @@ public class Guitest extends JFrame {
 		btnWarehouse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-			//	int returnValue = openFileChooser.showOpenDialog(this);
+				int returnValue = openFileChooser.showOpenDialog(openFileChooser);
 				
-			//	if returnValue == JFileChooser.APPROVE_OPTION {
-					//fileWarehouse = openFileChooser.getSelectedFile();
+				if( returnValue == JFileChooser.APPROVE_OPTION ){
+					fileWarehouse = openFileChooser.getSelectedFile();
 					
-			//	} else {
+				} else {
 					
-			//	} 
+				} 
 						
 			}
 		});
@@ -150,13 +168,13 @@ public class Guitest extends JFrame {
 		JButton btnOrder = new JButton("Choose File");
 		btnOrder.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//int returnValue = openFileChooser.showOpenDialog(this);
+				int returnValue = openFileChooser.showOpenDialog(openFileChooser);
 				
-			//	if returnValue == JFileChooser.APPROVE_OPTION {
-					//fileOrder = openFileChooser.getSelectedFile();
-			//	} else {
+				if (returnValue == JFileChooser.APPROVE_OPTION ){
+					fileOrder = openFileChooser.getSelectedFile();
+				} else {
 					
-			//	}
+				}
 			}
 		});
 		btnOrder.setFont(new Font("Tahoma", Font.PLAIN, 14));
@@ -164,16 +182,43 @@ public class Guitest extends JFrame {
 		contentPane.add(btnOrder);
 		
 		JButton btnSubmit = new JButton("Submit");
+		btnSubmit.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//sends allll the data to controller
+			}
+		});
 		btnSubmit.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnSubmit.setBounds(234, 268, 115, 21);
 		contentPane.add(btnSubmit);
+		
+		txtNumberOfStates = new JTextField();
+		txtNumberOfStates.setVisible(false);
+		txtNumberOfStates.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		txtNumberOfStates.setText("Enter Number of States");
+		txtNumberOfStates.setBounds(439, 220, 172, 19);
+		contentPane.add(txtNumberOfStates);
+		txtNumberOfStates.setColumns(10);
 	}
 	
 	
 	
-	public void printsolution(String solution) {
+	public void setSolution(String solution) {
 		txtAreaSolution.setText(solution);
 	}
 	
+	public int getAlgo() {
+		return algo;
+	}
 	
+	public File getWarehouse() {
+		return fileWarehouse;
+	}
+	
+	public File getOrder() {
+		return fileOrder;
+	}
+	
+	public int getExtraStates() {
+		return Integer.parseInt(txtNumberOfStates.getText());
+	}
 }
