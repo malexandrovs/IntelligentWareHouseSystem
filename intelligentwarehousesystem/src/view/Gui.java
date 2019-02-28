@@ -18,6 +18,7 @@ import java.io.File;
 import javax.swing.JTextField;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JOptionPane;
 
 public class Gui extends JFrame {
 
@@ -31,6 +32,8 @@ public class Gui extends JFrame {
 	private JButton btnSubmitWarehouse;
 	private JButton btnSubmitOrder;
 	private JTextArea txtAreaSolution;
+	private JLabel lblabelParam;
+	private JOptionPane errPane;
 	/**
 	 * Launch the application.
 	 */
@@ -86,6 +89,7 @@ public class Gui extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				algo = 0;
 				txtNumberOfStates.setVisible(false);
+				lblabelParam.setVisible(false);
 				
 			}
 		});
@@ -99,6 +103,7 @@ public class Gui extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				algo = 1;
 				txtNumberOfStates.setVisible(false);
+				lblabelParam.setVisible(false);
 				
 			}
 		});
@@ -112,6 +117,7 @@ public class Gui extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				algo = 2;
 				txtNumberOfStates.setVisible(false);
+				lblabelParam.setVisible(false);
 			}
 		});
 		buttonGroup.add(rButtonSA);
@@ -123,6 +129,7 @@ public class Gui extends JFrame {
 		rButtonRR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtNumberOfStates.setVisible(true);
+				lblabelParam.setVisible(true);
 				algo = 3;
 			}
 		});
@@ -135,6 +142,7 @@ public class Gui extends JFrame {
 		rButtonLBS.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				txtNumberOfStates.setVisible(true);
+				lblabelParam.setVisible(true);
 				algo = 4;
 				
 			}
@@ -192,8 +200,7 @@ public class Gui extends JFrame {
 		txtNumberOfStates = new JTextField();
 		txtNumberOfStates.setVisible(false);
 		txtNumberOfStates.setFont(new Font("Tahoma", Font.PLAIN, 14));
-		txtNumberOfStates.setText("Enter Number of States");
-		txtNumberOfStates.setBounds(417, 220, 172, 19);
+		txtNumberOfStates.setBounds(462, 231, 55, 19);
 		contentPane.add(txtNumberOfStates);
 		txtNumberOfStates.setColumns(10);
 		
@@ -201,6 +208,12 @@ public class Gui extends JFrame {
 		btnSubmitWarehouse.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		btnSubmitWarehouse.setBounds(417, 53, 165, 21);
 		contentPane.add(btnSubmitWarehouse);
+		
+		lblabelParam = new JLabel("Enter Number of States:");
+		lblabelParam.setVisible(false);
+		lblabelParam.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblabelParam.setBounds(417, 211, 157, 13);
+		contentPane.add(lblabelParam);
 		
 		
 	}
@@ -245,9 +258,6 @@ public class Gui extends JFrame {
 	}
 	
 	public void errorAlert(String s){
-		   JOptionPane.showMessageDialog(null, s);
+		 errPane.showMessageDialog(null, s);
 	}
-	
-	
-	
 }
