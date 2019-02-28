@@ -284,7 +284,7 @@ public class Algorithms{
 
   public int[] theBestNeighbour(List<int[]> neighbours){
     if(neighbours.isEmpty()){
-      int[] empty = new int[0];
+      int[] empty = new int[1];
       return empty;
     }
    int[] currentBest = neighbours.get(0);
