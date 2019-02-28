@@ -68,22 +68,29 @@ public class WarehouseController {
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			String[] order;
+			File orderTxt;
 			int alg;
 			int param;
 			
 			try {
-				order = theView.getOrder();
-				alg = theView.getAlg(); //See above
+				orderTxt = theView.getOrder();
+				alg = theView.getAlgo();
 				param = theView.getParam();
 			}catch(Exception ex) {
 				//TODO: Handle exception
 			}
 			
-			theModel.startSearch(alg, param, order);
+			try{
+				theModel.initOrder(orderTxt);
+			} catch(InvalidOrderException e){
+				System.out.println("Your order had some "
+								+ "unaccepted items: \n" + e.getInvalidItems());
+			}
+
+			theModel.startSearch(alg, param, orderTxt);
 			
 			try {
-				theView.displayResult(theModel.getResult());
+				theView.setSolution(theModel.getResult());
 			} catch (Exception e) {
 				// TODO: handle exception
 			}

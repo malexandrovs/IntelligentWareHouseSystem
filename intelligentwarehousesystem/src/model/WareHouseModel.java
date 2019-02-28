@@ -66,18 +66,27 @@ public class WareHouseModel {
 				line = br.readLine();
 				psu++;
 			}
+			
+			stateHandler = new StateHandler(wareHouse,psus);
+			algs = new Algorithms(stateHandler);
+
 		} catch (IOException e) {
-			System.out.println(psu);
 			successful = false;
 		}
-		//j: Changed Class -> no singleton anymore, I changed your call accordingly
-		stateHandler = new StateHandler(wareHouse,psus);
-		algs = new Algorithms(stateHandler);
+		
+
 
 		return successful;
  }
 
- 	public void initOrder(String[] order) throws InvalidOrderException{
+ 	public void initOrder(File orderTxt) throws InvalidOrderException{
+		 String[] order = "";
+		 try(
+			 FileReader fr = new FileReader(orderTxt);
+			 BufferedReader br 0 new BufferedReader(fr);
+		 ){
+			 order = br.readLine().split(" ");
+		 }
 		stateHandler.setOrder(order);
 		int[] aState = stateHandler.generateInitialState();
 		if(!stateHandler.stateValid(aState)){
