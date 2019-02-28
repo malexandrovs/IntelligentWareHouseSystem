@@ -3,6 +3,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import model.InvalidOrderException;
 import model.WareHouseModel;
 import view.Gui;
 /**
@@ -41,7 +42,7 @@ public class WarehouseController {
 		 */
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			File warehouseTxt;
+			File warehouseTxt = null;
 			
 			try {
 				warehouseTxt = theView.getWarehouse();
@@ -50,7 +51,7 @@ public class WarehouseController {
 				// TODO: handle exception
 			}
 			
-			theModel.setWarehouse(warehouseTxt);
+			boolean wareHouseSet = theModel.initWarehouse(warehouseTxt);
 		}
 		
 	}
@@ -68,32 +69,41 @@ public class WarehouseController {
 		
 		@Override
 		public void actionPerformed(ActionEvent arg0) {
-			File orderTxt;
-			int alg;
-			int param;
+			// File orderTxt = null;
+			// int alg = 0;
+			// int param = 0;
+			boolean orderSet = true;
 			
-			try {
-				orderTxt = theView.getOrder();
-				alg = theView.getAlgo();
-				param = theView.getParam();
-			}catch(Exception ex) {
-				//TODO: Handle exception
-			}
+			// try {
+			// 	orderTxt = theView.getOrder();
+			// 	alg = theView.getAlgo();
+			// 	param = theView.getParam();
+			// }catch(Exception ex) {
+			// 	//TODO: Handle exception
+			// }
 			
 			try{
-				theModel.initOrder(orderTxt);
+				orderSet = theModel.initOrder(theView.getOrder());
+
+
 			} catch(InvalidOrderException e){
 				System.out.println("Your order had some "
 								+ "unaccepted items: \n" + e.getInvalidItems());
 			}
 
-			theModel.startSearch(alg, param, orderTxt);
+			if(orderSet){
+
+				theModel.startSearch(theView.getAlgo(), theView.getParam());
 			
-			try {
-				theView.setSolution(theModel.getResult());
-			} catch (Exception e) {
-				// TODO: handle exception
+				try {
+					theView.setSolution(theModel.getResult());
+				} catch (Exception e) {
+					// TODO: handle exception
+				}
+			} else{
+				//alert window!!
 			}
+
 		}
 		
 	}

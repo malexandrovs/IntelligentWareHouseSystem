@@ -1,6 +1,7 @@
 package model;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -34,7 +35,7 @@ public class WareHouseModel {
 	 *@return boolean true if setWarehouse was successful, false otherwise.
 	 *@param MISSING
 	 */
-	public boolean setWarehouse(File warehouseTxt){
+	public boolean initWarehouse(File warehouseTxt){
 
 		boolean successful = true;
 		int psu = 0;
@@ -79,14 +80,17 @@ public class WareHouseModel {
 		return successful;
  }
 
- 	public void initOrder(File orderTxt) throws InvalidOrderException{
-		 String[] order = "";
+ 	public boolean initOrder(File orderTxt) throws InvalidOrderException{
+		 boolean successful = true;
+		 String[] order = null;
 		 try(
 			 FileReader fr = new FileReader(orderTxt);
-			 BufferedReader br 0 new BufferedReader(fr);
+			 BufferedReader br = new BufferedReader(fr);
 		 ){
 			 order = br.readLine().split(" ");
-		 }
+		 } catch (IOException e){
+			successful = false;
+		 } 
 		stateHandler.setOrder(order);
 		int[] aState = stateHandler.generateInitialState();
 		if(!stateHandler.stateValid(aState)){
@@ -98,6 +102,7 @@ public class WareHouseModel {
 			}
 			throw new InvalidOrderException(unknownItems);
 		}
+		return successful;
 	 }
 
  	/**
