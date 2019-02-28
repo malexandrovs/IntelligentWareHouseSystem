@@ -45,9 +45,9 @@ public class Algorithms{
        int[] bestNeighbour = theBestNeighbour(neighbours);
        int newValue = stateMethods.evaluate(bestNeighbour);
 
-       if(newValue == stateMethods.optimum()){
-         return bestNeighbour;
-       }
+      //  if(newValue == stateMethods.optimum()){
+      //    return bestNeighbour;
+      //  }
 
        if(newValue <= stateValue){
          return finalState;
@@ -80,9 +80,9 @@ public class Algorithms{
     int stateValue = stateMethods.evaluate(finalState);
 
 
-    if(stateValue == stateMethods.optimum()){
-       return this.finalState;
-    }
+    // if(stateValue == stateMethods.optimum()){
+    //    return this.finalState;
+    // }
 
     //we perform simulated annealing until our temperature reaches 0
     for(int i = temperature; i > 0; i = temperature - 5){
@@ -96,9 +96,9 @@ public class Algorithms{
 
         int newValue = stateMethods.evaluate(newState);
 
-        if(newValue == stateMethods.optimum()){
-          return newState;
-        }
+        // if(newValue == stateMethods.optimum()){
+        //   return newState;
+        // }
 
         int deltaValue = newValue - stateValue;
         Random downstep = new Random();

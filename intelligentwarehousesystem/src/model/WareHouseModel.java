@@ -71,7 +71,7 @@ public class WareHouseModel {
 			successful = false;
 		}
 		//j: Changed Class -> no singleton anymore, I changed your call accordingly
-		stateHandler = new StateHandler(wareHouse,psus;
+		stateHandler = new StateHandler(wareHouse,psus);
 		algs = new Algorithms(stateHandler);
 
 		return successful;
