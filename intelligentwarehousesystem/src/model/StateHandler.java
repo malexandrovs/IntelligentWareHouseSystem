@@ -214,9 +214,11 @@ public class StateHandler {
     return (!list.contains(-1));
   }
 	
-  /**
-   *@return int[] containing i ints. The ith value corresponds to
-   * the ith ordered item.
+  /** Shows the PSUs used in order to get all items of the order.
+   *@return int[] containing i psus. The order of the psus does not 
+   * correspond anymore to the order of the wanted items.
+   *@param state of type[] which should be translated in the psus used 
+   *for fulfilling the order.
    */
   public int[] showUsedPSUs(int[] state){
     List<Integer> usedPSUs = new ArrayList<Integer>();
@@ -258,6 +260,7 @@ public class StateHandler {
         }
       }
     }
+    //we translate our result into an int[]
     int[] result = new int[usedPSUs.size()];
     for(int k = 0; k < result.length; k++){
       result[k] = usedPSUs.get(k);
@@ -265,7 +268,11 @@ public class StateHandler {
     System.out.println("@StateHandler: used PSUs" + Arrays.toString(result));
     return result;
   }
-
+  
+  /** Returns the number of used psus of a certain state.
+   *@return int, the number of used psus.
+   *@param state of type int[].
+   */
   public int numOfUsedPSUs(int[] state){
     int[] stateResult = this.showUsedPSUs(state);
     return stateResult.length;
