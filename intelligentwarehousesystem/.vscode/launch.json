@@ -2,6 +2,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "CodeLens (Launch) - IntelligentWareHouseSystem",
+            "request": "launch",
+            "mainClass": "IntelligentWareHouseSystem",
+            "projectName": "intelligentwarehousesystem_892895b5"
+        },
+        {
+            "type": "java",
             "name": "CodeLens (Launch) - WarehouseTest",
             "request": "launch",
             "mainClass": "WarehouseTest",
