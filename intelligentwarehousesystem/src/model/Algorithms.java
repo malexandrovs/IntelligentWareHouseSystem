@@ -111,7 +111,8 @@ public class Algorithms{
   	}
 
     if(current.isEmpty()){
-      return int[] empty = new int[0];
+      int[] nothing = new int[0];
+      return nothing;
     }
 
 
